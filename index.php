@@ -108,7 +108,7 @@ require "./common/database.php";
               <a class="nav-link text-light me-3" href="#company">Companies</a>
             </li>
             <li class="nav-item me-3">
-              <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $base_url . 'user_login.php' ?>" style="background-color:gold;">
+              <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
                 <i class="fa-regular fa-user" style="margin-right: 10px;"></i>User Login</a>
             </li>
             <li class="nav-item">

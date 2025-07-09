@@ -2,42 +2,71 @@
 require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
-require "./common/check_auth.php";
 
 $error = false;
+$first_name =
+$firstName_error =
+$last_name = 
+$lastName_error = 
 $user_name =
-    $userName_error =
-    $user_phone =
-    $userPhone_error =
-    $user_password =
-    $userPassword_error =
-    $user_email =
-    $userEmail_error =
-    $user_address =
-    $userAddress_error =
-    $user_confirm_password =
-    $userConfirmPassword_error = '';
+$userName_error =
+$user_phone =
+$userPhone_error =
+$user_password =
+$userPassword_error =
+$user_email =
+$userEmail_error =
+$user_address =
+$userAddress_error =
+$user_confirm_password =
+$userConfirmPassword_error = '';
 
 
 if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
    
+    $last_name = $mysqli->real_escape_string($_POST['last_name']);
+    $first_name = $mysqli->real_escape_string($_POST['first_name']);
     $user_name = $mysqli->real_escape_string($_POST['user_name']);
     $user_phone = $mysqli->real_escape_string($_POST['user_phone']);
     $user_password = $mysqli->real_escape_string($_POST['user_password']);
     $user_email = $mysqli->real_escape_string($_POST['user_email']);
     $user_address = $mysqli->real_escape_string($_POST['user_address']);
     $user_confirm_password = $mysqli->real_escape_string($_POST['user_confirm_password']);
-    
+
+    //FirstName validation
+    if (strlen($first_name) == 0) {
+        $error = true;
+        $firstName_error  = "First Name is require";
+    } else if (strlen($first_name) <= 2) {
+        $error = true;
+        $firstName_error  = "First Name greater than 2 character.";
+    } else if (strlen($first_name) >= 30) {
+        $error = true;
+        $firstName_error  = "First Name less than 30 character.";
+    }
+
+    //lastName validation
+    if (strlen($last_name) == 0) {
+        $error = true;
+        $lastName_error  = "Last Name is require";
+    } else if (strlen($last_name) <= 2) {
+        $error = true;
+        $lastName_error  = "Last Name greater than 2 character.";
+    } else if (strlen($last_name) >= 30) {
+        $error = true;
+        $lastName_error  = "Last Name less than 30 character.";
+    }
+
     //Name validation
     if (strlen($user_name) == 0) {
         $error = true;
-        $userName_error  = "Name is require";
+        $userName_error  = "User Name is require";
     } else if (strlen($user_name) <= 5) {
         $error = true;
-        $userName_error  = "Name greater than 5 character.";
+        $userName_error  = "User Name greater than 5 character.";
     } else if (strlen($user_name) >= 30) {
         $error = true;
-        $userName_error  = "Name less than 30 character.";
+        $userName_error  = "User Name less than 30 character.";
     }
 
     //Email validation
@@ -98,6 +127,8 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     
     if (!$error) {
         $data =[
+            'first_name'=> $first_name,
+            'last_name' => $last_name,
             'name'      => $user_name,
             'email'     => $user_email,
             'phone'     => $user_phone,
@@ -107,7 +138,13 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         ];
         $result = insertData('users',$mysqli,$data);
         if ($result) {
-            header("Location: $user_base_url");
+            $url = $base_url . "user_login.php?success=Register Success";
+            header("Location: $url");
+            exit;
+        }else{
+            $url = $base_url . "index.php?error=Register not success";
+            header("Location: $url");
+            exit;
         }
     }
 }
@@ -201,22 +238,22 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 <div class="row">
                                     <div class="col-6">
                                         <div class=" form-group">
-                                            <label for="name" class="text-light fw-bold mb-2">First Name</label>
+                                            <label for="first_name" class="text-light fw-bold mb-2">First Name</label>
                                             <div class="d-flex border border-info rounded">
                                                 <i class="fa-regular fa-user" style="font-size:20pt;color:white;background-color: blue;padding:8px;margin:5px;border-radius:7px"></i>
-                                                <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $user_name ?>" id="name" placeholder="First Name" name="user_name">
+                                                <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $first_name ?>" id="first_name" placeholder="First Name" name="first_name">
                                             </div>
                                             <div style="height: 20px;">
                                                 <?php
-                                                if ($userName_error && $error) { ?>
-                                                    <small class="form-text text-danger"><?= $userName_error ?></small>
+                                                if ($firstName_error && $error) { ?>
+                                                    <small class="form-text text-danger"><?= $firstName_error ?></small>
                                                 <?php
                                                 }
                                                 ?>
                                             </div>
                                         </div>
                                         <div class=" form-group">
-                                            <label for="name" class="text-light fw-bold mb-2">Name</label>
+                                            <label for="name" class="text-light fw-bold mb-2">User Name</label>
                                             <div class="d-flex border border-info rounded">
                                                 <i class="fa-regular fa-user" style="font-size:20pt;color:white;background-color: blue;padding:8px;margin:5px;border-radius:7px"></i>
                                                 <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $user_name ?>" id="name" placeholder="User Name" name="user_name">
@@ -263,15 +300,15 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                     </div>
                                     <div class="col-6">
                                         <div class=" form-group">
-                                            <label for="name" class="text-light fw-bold mb-2">Last Name</label>
+                                            <label for="lastname" class="text-light fw-bold mb-2">Last Name</label>
                                             <div class="d-flex border border-info rounded">
                                                 <i class="fa-regular fa-user" style="font-size:20pt;color:white;background-color: blue;padding:8px;margin:5px;border-radius:7px"></i>
-                                                <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $user_name ?>" id="name" placeholder="Last Name" name="user_name">
+                                                <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $last_name ?>" id="lastname" placeholder="Last Name" name="last_name">
                                             </div>
                                             <div style="height: 20px;">
                                                 <?php
-                                                if ($userName_error && $error) { ?>
-                                                    <small class="form-text text-danger"><?= $userName_error ?></small>
+                                                if ($lastName_error && $error) { ?>
+                                                    <small class="form-text text-danger"><?= $lastName_error ?></small>
                                                 <?php
                                                 }
                                                 ?>
@@ -326,7 +363,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 </div>
                                 <div class="row pt-5">
                                     <div class="col-12">
-                                        <input type="hidden" name="form_sub" value="user" />
+                                        <input type="hidden" name="form_sub" value="1" />
                                         <button type="submit" style="background-color:gold" class="btn btn-lg w-100 text-light">Register Now</button>
                                         <div class="d-flex justify-content-center mt-5">
                                             <h5 class="text-light">Have an account? </h5>
