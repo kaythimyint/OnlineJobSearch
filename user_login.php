@@ -27,7 +27,7 @@ if (isset($_POST['form_submit']) && $_POST['form_submit']=='1') {
     }
 
     if (!$error) {
-        $result = selectData('users',$mysqli,"email='$email'");
+        $result = selectData('users',$mysqli,"WHERE email='$email'");
         if ($result->num_rows >0) {
             $data = $result->fetch_assoc();
             if ($data['password'] == $byscript_password) {

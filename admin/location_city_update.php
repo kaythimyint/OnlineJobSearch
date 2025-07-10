@@ -10,13 +10,13 @@ $name_error = '';
 
 if (isset($_GET['id']) && $_GET['id'] != '') {
     $update_id = $_GET['id'];
-    $selectRes = selectData('job_title',$mysqli,"WHERE id = '$update_id'");
+    $selectRes = selectData('location_city',$mysqli,"WHERE id = '$update_id'");
     if ($selectRes->num_rows >0) {
         $item = $selectRes->fetch_assoc();
         $name = $item['name'];
     }
 }else{
-    $url = $admin_base_url."job_title.php?error:ID Not Found";
+    $url = $admin_base_url."location_city.php?error:ID Not Found";
     header("Location:$url");
 }
 
@@ -43,9 +43,9 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $where =[
             'id' => $update_id
         ];
-        $updateRes = updateData('job_title',$mysqli,$data,$where);
+        $updateRes = updateData('location_city',$mysqli,$data,$where);
         if ($updateRes) {
-            $url = $admin_base_url."job_title.php?success:Job Title Create Success";
+            $url = $admin_base_url."location_city.php?success:Job Title Create Success";
             header("Location:$url");
             exit();
         }else{
@@ -62,8 +62,8 @@ require "../admin/admin_sidebar.php";
 ?>
         <div class="col-12 col-md-9">
            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h1>Job Title Update</h1>
-                <a href="<?= $admin_base_url."job_title.php" ?>" class="btn btn-dark btn-lg">Back</a>
+                <h1>City Update</h1>
+                <a href="<?= $admin_base_url."location_city.php" ?>" class="btn btn-dark btn-lg">Back</a>
            </div>
             <?php
                 if ($error_message && $error) {?>
@@ -80,8 +80,8 @@ require "../admin/admin_sidebar.php";
                 <div class="card-body">
                     <form action="" method="POST">
                         <div class="form-group mb-3">
-                        <label for="name" class="mb-2">Job Title Name</label>
-                        <input type="text" class="form-control" name="name" value="<?= $item['name'] ?>" id="name" placeholder="Enter Job title name">
+                        <label for="name" class="mb-2">City Name</label>
+                        <input type="text" class="form-control" name="name" value="<?= $item['name'] ?>" id="name" placeholder="Enter city name">
                     </div>
                     <div style="height: 20px;margin-bottom:10px">
                         <?php

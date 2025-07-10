@@ -24,13 +24,13 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $data =[
             'name' => $name
         ];
-        $insertRes = insertData('job_title',$mysqli,$data);
+        $insertRes = insertData('job_type',$mysqli,$data);
         if ($insertRes) {
-            $url = $admin_base_url."job_title.php?success:Job Title Create Success";
+            $url = $admin_base_url."job_type.php?success:Job type Create Success";
             header("Location:$url");
             exit();
         }else{
-            $url = $admin_base_url."job_title_create.php?error:Job Title Create Not Success";
+            $url = $admin_base_url."job_type_create.php?error:Job type Create Not Success";
             header("Location:$url");
             exit();
         }
@@ -40,15 +40,15 @@ require "../admin/admin_sidebar.php";
 ?>
         <div class="col-12 col-md-9">
            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h1>Job Title Create</h1>
-                <a href="<?= $admin_base_url."job_title.php" ?>" class="btn btn-dark btn-lg">Back</a>
+                <h1>Job Type Create</h1>
+                <a href="<?= $admin_base_url."job_type.php" ?>" class="btn btn-dark btn-lg">Back</a>
            </div>
            <div class="card">
                 <div class="card-body">
                     <form action="" method="POST">
                         <div class="form-group mb-3">
-                        <label for="name" class="mb-2">Job Title Name</label>
-                        <input type="text" class="form-control" name="name" value="<?= $name ?>" id="name" placeholder="Enter Job title name">
+                        <label for="name" class="mb-2">Job type Name</label>
+                        <input type="text" class="form-control" name="name" value="<?= $name ?>" id="name" placeholder="Enter Job type name">
                     </div>
                     <div style="height: 20px;margin-bottom:10px">
                         <?php

@@ -10,13 +10,13 @@ $name_error = '';
 
 if (isset($_GET['id']) && $_GET['id'] != '') {
     $update_id = $_GET['id'];
-    $selectRes = selectData('job_title',$mysqli,"WHERE id = '$update_id'");
+    $selectRes = selectData('job_type',$mysqli,"WHERE id = '$update_id'");
     if ($selectRes->num_rows >0) {
         $item = $selectRes->fetch_assoc();
         $name = $item['name'];
     }
 }else{
-    $url = $admin_base_url."job_title.php?error:ID Not Found";
+    $url = $admin_base_url."job_type.php?error:ID Not Found";
     header("Location:$url");
 }
 
@@ -43,16 +43,16 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $where =[
             'id' => $update_id
         ];
-        $updateRes = updateData('job_title',$mysqli,$data,$where);
+        $updateRes = updateData('job_type',$mysqli,$data,$where);
         if ($updateRes) {
-            $url = $admin_base_url."job_title.php?success:Job Title Create Success";
+            $url = $admin_base_url."job_type.php?success:Job type Create Success";
             header("Location:$url");
             exit();
         }else{
             $error = true;
             $alert = [
             'icon' => 'error',
-            'title' => 'Update Failed'
+            'type' => 'Update Failed'
             ];
             $error_message = "Update Fail";
         }
@@ -62,15 +62,15 @@ require "../admin/admin_sidebar.php";
 ?>
         <div class="col-12 col-md-9">
            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h1>Job Title Update</h1>
-                <a href="<?= $admin_base_url."job_title.php" ?>" class="btn btn-dark btn-lg">Back</a>
+                <h1>Job Type Update</h1>
+                <a href="<?= $admin_base_url."job_type.php" ?>" class="btn btn-dark btn-lg">Back</a>
            </div>
             <?php
                 if ($error_message && $error) {?>
                     <script>
                         Swal.fire({
                                     icon: '<?= $alert['icon'] ?>',
-                                    title: '<?= $alert['title'] ?>'
+                                    type: '<?= $alert['type'] ?>'
                                     });
                     </script>
             <?php        
@@ -80,8 +80,8 @@ require "../admin/admin_sidebar.php";
                 <div class="card-body">
                     <form action="" method="POST">
                         <div class="form-group mb-3">
-                        <label for="name" class="mb-2">Job Title Name</label>
-                        <input type="text" class="form-control" name="name" value="<?= $item['name'] ?>" id="name" placeholder="Enter Job title name">
+                        <label for="name" class="mb-2">Job Type Name</label>
+                        <input type="text" class="form-control" name="name" value="<?= $item['name'] ?>" id="name" placeholder="Enter Job type name">
                     </div>
                     <div style="height: 20px;margin-bottom:10px">
                         <?php
