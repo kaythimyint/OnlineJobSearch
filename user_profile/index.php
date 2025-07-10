@@ -1,8 +1,17 @@
 <?php
 session_start(); 
+// require "../common/check_auth.php";
+    
 require "./user_header.php";
 require "../common/database.php";
 require "../common/common_funtion.php";
+
+if ($_SESSION['role'] == 'employer') {
+    $url = $base_url . "index.php?error=Role error";
+    header("Location:$url");
+    exit();
+}
+?>
 
 // $id = $_SESSION['id'];
 // selectData('users',$mysqli,"id = '$id'");

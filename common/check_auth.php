@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "./common/url.php";
+require "../common/url.php";
 
     if (!isset($_SESSION['name']) && !isset($_SESSION['email']) && !isset($_SESSION['role'])) 
     {

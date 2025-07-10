@@ -9,12 +9,14 @@ require "../common/url.php";
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Job Search</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/regular.min.css">
   <link rel="stylesheet" href="../bootstrap-5.3.6-dist/css/bootstrap.min.css">
+  <script src="../js/jquery.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -35,6 +37,7 @@ require "../common/url.php";
 </head>
 
 <body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <nav class="navbar navbar-expand-sm navbar-dark" style="background-color:darkblue">
     <div class="container-fluid d-flex justify-content-between">
       <a class="navbar-brand ms-5 text-black" href="#"><img src="../img/logo.jpg" alt="" style="width:60px;height:60px;border-radius:50%;"></a>

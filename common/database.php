@@ -48,7 +48,7 @@ function create_table($mysqli)
             address VARCHAR(50) NOT NULL,
             education VARCHAR(30) NOT NULL,
             profile VARCHAR(50) NOT NULL,
-            role ENUM('admin','user','employer') NOT NULL,
+            role ENUM('admin','user') NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
@@ -68,6 +68,7 @@ function create_table($mysqli)
             ceo_name VARCHAR(30) NOT NULL,
             name VARCHAR(30) NOT NULL,
             email VARCHAR(30) NOT NULL UNIQUE,
+            role ENUM('admin','employer') NOT NULL,
             phone VARCHAR(20) NOT NULL,
             address VARCHAR(50) NOT NULL,
             password VARCHAR(50) NOT NULL,

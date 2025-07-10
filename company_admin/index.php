@@ -1,6 +1,12 @@
 <?php
-require "./header.php";
-require "./footer.php";
+session_start();
+require "../common/url.php";
+
+if ($_SESSION['role'] == 'user') {
+    $url = $base_url . "index.php?error=Role error";
+    header("Location:$url");
+    exit();
+}
 ?>
 
         <!--**********************************
@@ -579,6 +585,10 @@ require "./footer.php";
         <!--**********************************
             Content body end
         ***********************************-->
+<?php
+require "./header.php";
+require "./footer.php";
+?>
 
 
         
