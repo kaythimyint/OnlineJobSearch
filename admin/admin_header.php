@@ -1,8 +1,18 @@
 <?php
+require "../common/check_auth.php";
 require "../common/common_funtion.php";
 require "../common/database.php";
 require "../common/url.php";
 
+if ($_SESSION['role'] == 'user') {
+  $url = $base_url . "index.php?error=Role error";
+  header("Location:$url");
+  exit();
+}else if ($_SESSION['role'] == 'employer') {
+  $url = $base_url . "index.php?error=Role error";
+  header("Location:$url");
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

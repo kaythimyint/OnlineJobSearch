@@ -1,6 +1,10 @@
 <?php
+// session_start();
 require "./common/url.php";
 require "./common/database.php";
+
+// var_dump($_SESSION['name']);
+// die();
 ?>
 <!DOCTYPE html>
 <html lang="en">

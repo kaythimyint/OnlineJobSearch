@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+
 require "../admin/admin_header.php";
 
 $selectRes = selectData('location_township',$mysqli);

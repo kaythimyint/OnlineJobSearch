@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+
 require "../admin/admin_header.php";
 
 $selectRes = selectData('experience',$mysqli);
@@ -25,7 +25,7 @@ require "../admin/admin_sidebar.php";
                         <thead>
                             <tr>
                                 <th class="col-1">ID No</th>
-                                <th class="col-3">Experience Range</th>
+                                <th class="col-3">Experience Rwange</th>
                                 <th class="col-2">Created AT</th>
                                 <th class="col-3">Updated AT</th>
                                 <th class="col-3">Action</th>

@@ -52,6 +52,43 @@
     
   
   <script src="../bootstrap-5.3.6-dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 6,
+      spaceBetween: 10,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        100: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        250: {
+          slidesPerView: 2,
+          spaceBetween: 30,
+        },
+        576: {
+          slidesPerView: 3,
+          spaceBetween: 40,
+        },
+        768: {
+          slidesPerView: 4,
+          spaceBetween: 60,
+        },
+        992: {
+          slidesPerView: 5,
+          spaceBetween: 80,
+        },
+      },
+      autoplay: {
+        delay: 1500,
+        disableOnInteraction: false,
+      },
+    });
+  </script>
 </body>
 
 </html>

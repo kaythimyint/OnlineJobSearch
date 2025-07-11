@@ -1,9 +1,9 @@
 <?php
 
-$id = $_SESSION['id'];
-$result = selectData('users',$mysqli,"WHERE id = '$id'");
-if ($result->num_rows >0) {
-    $data = $result->fetch_assoc();
+    $id = $_SESSION['id'];
+    $result = selectData('users',$mysqli,"WHERE id = '$id'");
+    if ($result->num_rows >0) {
+        $data = $result->fetch_assoc();
     // var_dump($data);
     // die();
 }
@@ -49,7 +49,7 @@ if ($result->num_rows >0) {
                             <div class="" style="border:1px dotted silver;"></div>
                         </div>
                         <div>
-                            <a href="" class="btn btn-lg">Logout</a>    
+                            <a href="<?= $company_base_url."logout.php" ?>" class="btn btn-lg">Logout</a>    
                         </div>
                     </div>
                 </div>

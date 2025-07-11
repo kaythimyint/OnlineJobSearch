@@ -44,10 +44,13 @@ function create_table($mysqli)
             gender ENUM('male','female') NOT NULL,
             phone VARCHAR(20) NOT NULL,
             skill VARCHAR(30) NOT NULL,
-            experience VARCHAR(30) NOT NULL,
+            language VARCHAR(30) NOT NULL,
             address VARCHAR(50) NOT NULL,
             education VARCHAR(30) NOT NULL,
             profile VARCHAR(50) NOT NULL,
+            cv VARCHAR(50) NOT NULL,
+            dateofbrith DATE,
+            nationalid VARCHAR(30) NOT NULL,
             role ENUM('admin','user') NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -57,7 +60,9 @@ function create_table($mysqli)
     //Categories Table
     $sql = "CREATE TABLE IF NOT EXISTS `categories`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL
+            name VARCHAR(30) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
@@ -84,49 +89,63 @@ function create_table($mysqli)
     //Salary Table
     $sql = "CREATE TABLE IF NOT EXISTS `salary`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            type VARCHAR(30) NOT NULL
+            type VARCHAR(30) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
     //Job_title Table
     $sql = "CREATE TABLE IF NOT EXISTS `job_title`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(50) NOT NULL
+            name VARCHAR(50) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
     //Experience Table
     $sql = "CREATE TABLE IF NOT EXISTS `experience`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            type VARCHAR(30) NOT NULL
+            type VARCHAR(30) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
     //Job_post_categories Table
     $sql = "CREATE TABLE IF NOT EXISTS `job_post_categories`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL
+            name VARCHAR(30) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
     //Location_city Table
     $sql = "CREATE TABLE IF NOT EXISTS `location_city`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL
+            name VARCHAR(30) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
     //Location_township Table
     $sql = "CREATE TABLE IF NOT EXISTS `location_township`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(20) NOT NULL
+            name VARCHAR(20) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
     //Job_type Table
     $sql = "CREATE TABLE IF NOT EXISTS `job_type`(
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL
+            name VARCHAR(30) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
     if ($mysqli->query($sql) === false) return false;
 
@@ -135,10 +154,11 @@ function create_table($mysqli)
         id INT AUTO_INCREMENT PRIMARY KEY,
         company_id INT NOT NULL,
         job_title_id INT NOT NULL UNIQUE,
-        requirements VARCHAR(20) NOT NULL,
+        requirements TEXT NOT NULL,
         experience_id INT NOT NULL,
         salary_id INT NOT NULL,
-        description VARCHAR(50) NOT NULL,
+        vacancy INT NOT NULL,
+        description TEXT NOT NULL,
         job_type_id INT NOT NULL,
         location_city_id INT NOT NULL,
         location_township_id INT NOT NULL,

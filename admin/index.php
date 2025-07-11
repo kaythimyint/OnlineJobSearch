@@ -1,6 +1,5 @@
 <?php
 
-require "../common/check_auth.php";
 require "../admin/admin_header.php";
 require "../admin/admin_sidebar.php";
 

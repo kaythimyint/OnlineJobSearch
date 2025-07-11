@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+ 
 require "../admin/admin_header.php";
 
 $error =false;
