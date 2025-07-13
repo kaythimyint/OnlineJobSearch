@@ -49,7 +49,7 @@ function create_table($mysqli)
             education VARCHAR(30) NOT NULL,
             profile VARCHAR(50) NOT NULL,
             cv VARCHAR(50) NOT NULL,
-            dateofbrith DATE,
+            dateofbrith DATE NOT NULL,
             nationalid VARCHAR(30) NOT NULL,
             role ENUM('admin','user') NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

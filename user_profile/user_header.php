@@ -119,9 +119,19 @@ if ($result->num_rows >0) {
   </nav>
   <div class="container pt-5">
     <div class="row">
-      <div class="col-12 col-lg-4 col-md-12">
+      <div class="col-12 col-lg-4 col-md-7 col-sm-10 mb-3">
         <div class="card shadow movecard">
-            <img class="card-img-top pt-2" src="../img/profile.jpg" alt="Card image" style="width: 95%;height:230px;margin:auto">
+            <?php
+                if ($data['profile'] == '') { ?>
+                  <img class="card-img-top pt-2" src="../img/profile.jpg" alt="Card image" style="width: 95%;height:230px;margin:auto">
+            <?php
+                }
+                else{ ?>
+                  <img class="card-img-top pt-2" src="<?= $data['profile'] ?>" alt="Card image" style="width: 95%;height:230px;margin:auto">
+            <?php
+                }
+            ?>
+            
             <div class="card-body">
                 <h4 class="card-title text-center"><?= $data['email'] ?></h4>
                 <p class="card-text text-warning text-center"><?= $data['name'] ?></p>
@@ -138,15 +148,15 @@ if ($result->num_rows >0) {
                         <div class="" style="border:1px dotted silver;"></div>
                     </div>
                     <div>
-                        <a href="<?= $admin_base_url."job_categories.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fas fa-book-open me-2"></i> Education</a>
+                        <a href="<?= $user_base_url."user_education.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fas fa-book-open me-2"></i> Education</a>
                         <div class="" style="border:1px dotted silver;"></div>
                     </div>
                     <div>
-                        <a href="<?= $admin_base_url."location_city.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fas fa-landmark me-2"></i> Skill</a>
+                        <a href="<?= $user_base_url."user_skill.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fas fa-landmark me-2"></i> Skill</a>
                         <div class="" style="border:1px dotted silver;"></div>
                     </div>
                     <div>
-                        <a href="<?= $admin_base_url."location_township.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fas fa-file me-2"></i> View Resume</a>
+                        <a href="<?= $user_base_url."user_resume.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fas fa-file me-2"></i> View Resume</a>
                         <div class="" style="border:1px dotted silver;"></div>
                     </div>
                     <div>
@@ -154,11 +164,7 @@ if ($result->num_rows >0) {
                         <div class="" style="border:1px dotted silver;"></div>
                     </div>
                     <div>
-                        <a href="<?= $admin_base_url."experience.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fa-solid fa-expand me-2"></i> Experince</a>
-                        <div class="" style="border:1px dotted silver;"></div>
-                    </div>
-                    <div>
-                        <a href="<?= $company_base_url."logout.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a>    
+                        <a href="<?= $user_base_url."user_logout.php" ?>" class="btn btn-lg" style="font-size:13pt"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a>    
                     </div>
                 </div>
             </div>
