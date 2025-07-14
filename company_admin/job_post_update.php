@@ -26,6 +26,13 @@ $requirement_error =
 $benefit = 
 $benefit_error = '';
 
+$update_id = isset($_GET['update_id']) ? $_GET['update_id'] : '';
+
+$job_post_result =selectData('job_post',$mysqli,"WHERE id = '$update_id'");
+if ($job_post_result->num_rows>0) {
+    $job_post_res = $job_post_result->fetch_assoc();
+}
+
 $categories_result = selectData('categories',$mysqli);
 $title_result = selectData('job_title',$mysqli);
 $experience_result = selectData('experience',$mysqli);
@@ -164,9 +171,12 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
             'category_id' => $category,
             'deadline' => $deadline,
         ];
-        $insert_result = insertData('job_post',$mysqli,$data);
+        $where = [
+            'id' => $update_id
+        ];
+        $insert_result = updateData('job_post',$mysqli,$data,$where);
         if ($insert_result) {
-            // $url = $company_base_url . "index.php?success=Job post success";
+            // $url = $company_base_url . "index.php?success=Job post update success";
             // header("Location:$url");
             // exit();
             echo '<script>window.location.href = "http://localhost/OnlineJobSearch/company_admin/index.php";</script>';
@@ -194,11 +204,11 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                         <div class="form-group">
                             <label for="categories" class="mb-2">Job categories</label>
                             <select name="categories" id="categories" class="form-control">
-                                <option value="">Choose category type</option>
+                                <option value="">Slect  One</option>
                                 <?php 
                                 if ($categories_result->num_rows>0) {
                                     while($type_res = $categories_result->fetch_assoc()){ ?>
-                                        <option value="<?= $type_res['id'] ?>" <?= $category == $type_res['id'] ? 'selected' :'' ?>><?= $type_res['name'] ?></option>
+                                        <option value="<?= $type_res['id'] ?>" <?= $job_post_res['category_id'] == $type_res['id'] ? 'selected' :'' ?>><?= $type_res['name'] ?></option>
                                 <?php
                                     }
                                 }
@@ -222,7 +232,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 <?php 
                                 if ($title_result->num_rows>0) {
                                     while($title_res = $title_result->fetch_assoc()){ ?>
-                                        <option value="<?= $title_res['id'] ?>" <?= $job_title == $title_res['id'] ? 'selected' :'' ?> ><?= $title_res['name'] ?></option>
+                                        <option value="<?= $title_res['id'] ?>" <?= $job_post_res['job_title_id'] == $title_res['id'] ? 'selected' :'' ?> ><?= $title_res['name'] ?></option>
                                 <?php
                                     }
                                 }
@@ -246,7 +256,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 <?php 
                                 if ($experience_result->num_rows>0) {
                                     while($experience_res = $experience_result->fetch_assoc()){ ?>
-                                        <option value="<?= $experience_res['id'] ?>" <?= $experience == $experience_res['id'] ? 'selected' :'' ?> ><?= $experience_res['type'] ?></option>
+                                        <option value="<?= $experience_res['id'] ?>" <?= $job_post_res['experience_id'] == $experience_res['id'] ? 'selected' :'' ?> ><?= $experience_res['type'] ?></option>
                                 <?php
                                     }
                                 }
@@ -265,7 +275,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="vacancy" class="mb-2">Vacancy</label>
-                            <input type="number" class="form-control" name="vacancy" value="<?= $vacancy ?>" min="1" id="vacancy" placeholder="eg: 1 or 2" name="quantity">
+                            <input type="number" class="form-control" name="vacancy" value="<?= $job_post_res['vacancy'] ?>" min="1" id="vacancy" placeholder="eg: 1 or 2" name="quantity">
                             <?php
                             if ($vacancy_error && $error) { ?>
                                 <small class="text-danger"><?= $vacancy_error ?></small>
@@ -284,7 +294,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 <?php 
                                 if ($job_type_result->num_rows>0) {
                                     while($job_type_res = $job_type_result->fetch_assoc()){ ?>
-                                        <option value="<?= $job_type_res['id'] ?>" <?= $job_type == $job_type_res['id'] ? 'selected' :'' ?> ><?= $job_type_res['name'] ?></option>
+                                        <option value="<?= $job_type_res['id'] ?>" <?= $job_post_res['job_type_id'] == $job_type_res['id'] ? 'selected' :'' ?> ><?= $job_type_res['name'] ?></option>
                                 <?php
                                     }
                                 }
@@ -308,7 +318,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 <?php 
                                 if ($salary_result->num_rows>0) {
                                     while($salary_res = $salary_result->fetch_assoc()){ ?>
-                                        <option value="<?= $salary_res['id'] ?>" <?= $salary == $salary_res['id'] ? 'selected' :'' ?> ><?= $salary_res['type'] ?></option>
+                                        <option value="<?= $salary_res['id'] ?>" <?= $job_post_res['salary_id'] == $salary_res['id'] ? 'selected' :'' ?> ><?= $salary_res['type'] ?></option>
                                 <?php
                                     }
                                 }
@@ -332,7 +342,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 <?php 
                                 if ($city_result->num_rows>0) {
                                     while($city_res = $city_result->fetch_assoc()){ ?>
-                                        <option value="<?= $city_res['id'] ?>" <?= $city == $city_res['id'] ? 'selected' :'' ?> ><?= $city_res['name'] ?></option>
+                                        <option value="<?= $city_res['id'] ?>" <?= $job_post_res['location_city_id'] == $city_res['id'] ? 'selected' :'' ?> ><?= $city_res['name'] ?></option>
                                 <?php
                                     }
                                 }
@@ -356,7 +366,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                 <?php 
                                 if ($township_result->num_rows>0) {
                                     while($township_res = $township_result->fetch_assoc()){ ?>
-                                        <option value="<?= $township_res['id'] ?>" <?= $township == $township_res['id'] ? 'selected' :'' ?> ><?= $township_res['name'] ?></option>
+                                        <option value="<?= $township_res['id'] ?>" <?= $job_post_res['location_township_id'] == $township_res['id'] ? 'selected' :'' ?> ><?= $township_res['name'] ?></option>
                                 <?php
                                     }
                                 }
@@ -376,7 +386,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                         <div class="form-group">
                             <label for="deadline" class="mb-2">Deadline</label>
                             <!-- <input type="text"   name="datepicker" class="datepicker-default form-control" id="datepicker"> -->
-                             <input type="text" class="form-control" placeholder="2017-06-04" id="mdate" name="deadline" value="<?= $deadline ?>">
+                             <input type="text" class="form-control" placeholder="2017-06-04" id="mdate" name="deadline" value="<?= $job_post_res['deadline'] ?>">
                             <!-- <input type="date" class="form-control"  id="deadline"> -->
                             <?php
                             if ($deadline_error && $error) { ?>
@@ -396,7 +406,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="description" class="mb-2">Job Description</label>
-                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= $description ?></textarea>
+                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= $job_post_res['description'] ?></textarea>
                             <?php
                             if ($description_error && $error) { ?>
                                 <small class="text-danger"><?= $description_error ?></small>
@@ -410,7 +420,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="requirement" class="mb-2">Job Requirement</label>
-                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= $requirement ?></textarea>
+                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= $job_post_res['requirements'] ?></textarea>
                             <?php
                             if ($requirement_error && $error) { ?>
                                 <small class="text-danger"><?= $requirement_error ?></small>
@@ -424,7 +434,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="benefit" class="mb-2">Benefits</label>
-                            <textarea name="benefit" id="benefit" cols="30" rows="10" class="form-control" placeholder="Enter benefit"><?= $benefit ?></textarea>
+                            <textarea name="benefit" id="benefit" cols="30" rows="10" class="form-control" placeholder="Enter benefit"><?= $job_post_res['benefit'] ?></textarea>
                             <?php
                             if ($benefit_error && $error) { ?>
                                 <small class="text-danger"><?= $benefit_error ?></small>

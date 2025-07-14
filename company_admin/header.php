@@ -3,6 +3,7 @@ require "../common/check_auth.php";
 require "../common/database.php";
 require "../common/common_funtion.php";
 require "../common/url.php";
+
 if ($_SESSION['role'] != 'employer') {
     // $url = $base_url . "index.php?error=Role error";
     // header("Location:$url");
@@ -51,7 +52,7 @@ if ($select_res->num_rows > 0) {
     <link href="./css/style.css" rel="stylesheet">
     <script src="./js/plugins-init/bs-daterange-picker-init.js"></script>
     <script src="../js/jquery.min.js"></script>
-</head>
+</head> 
 
 <body>
     
@@ -134,7 +135,7 @@ if ($select_res->num_rows > 0) {
                         <ul aria-expanded="false">
                             <li><a href="./job_post1.php">Job Post Create</a></li>
                             <li><a href="">Job Post Update</a></li>
-                        </ul>
+                        </ul>   
                     </li>
                     <li class="nav-label">Apps</li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
