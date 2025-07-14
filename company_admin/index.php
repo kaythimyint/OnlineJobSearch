@@ -16,7 +16,7 @@ $select_res = $mysqli->query($sql);
         <div class="row mb-3">
             <div class="col-12 d-flex justify-content-end">
                 <input type="hidden" name="form_sub" value="1">
-                <a href="./job_post1.php" class="btn btn-primary py-3 px-4 text-white fw-bold" style="font-size:15pt;">Post Create</a>
+                <a href="./job_post1.php" class="btn btn-primary py-3 px-4 text-white fw-bold" style="font-size:15pt;">Job Create</a>
             </div>
         </div>
         <div class="row">
@@ -45,8 +45,8 @@ $select_res = $mysqli->query($sql);
                                             <td><?= $result['jobtype_name'] ?></td>
                                             <td><?= $result['vacancy'] ?></td>
                                             <td>
-                                                <a href="<?= $company_base_url . 'job_post_update.php?update_id=' . $result['id'] ?>" class="btn btn-info">Update</a>
-                                                <a href="<?= $company_base_url . 'job_post_detail.php?detail_id=' . $result['id'] ?>" class="btn btn-primary">Details</a>
+                                                <a href="<?= $company_base_url . 'job_post_update.php?update_id=' . $result['id'] ?>" class="btn btn-info mb-2">Update</a>
+                                                <a href="<?= $company_base_url . 'job_post_detail.php?detail_id=' . $result['id'] ?>" class="btn btn-primary mb-2">Details</a>
                                             </td>
                                         </tr>
                                 <?php

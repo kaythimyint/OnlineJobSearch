@@ -138,7 +138,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         ];
         $result = insertData('companies',$mysqli,$data);
         if ($result) {
-            $url = $base_url . "company_login.php?success=Register Success";
+            $url = $base_url . "company_profile.php";
             header("Location: $url");
             exit;
         }else{
@@ -374,7 +374,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <div class="row">
                                 <div class="col-12">
                                     <input type="hidden" name="form_sub" value="1" />
-                                    <button type="submit" style="background-color:gold" class="btn btn-lg w-100 text-light">Register Now</button>
+                                    <button type="submit" style="background-color:gold" class="btn btn-lg w-100 text-light">Next</button>
                                     <div class="d-flex justify-content-center mt-5">
                                         <h5 class="text-light">Have an account? </h5>
                                         <a href="<?php echo $base_url . "company_login.php" ?>" style="color: gold;text-decoration:none">Login now</a>

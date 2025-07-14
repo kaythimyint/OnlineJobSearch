@@ -133,8 +133,8 @@ if ($select_res->num_rows > 0) {
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                                 class="icon icon-single-04"></i><span class="nav-text">Job Post</span></a>
                         <ul aria-expanded="false">
+                            <li><a href="./index.php">Job Post List</a></li>
                             <li><a href="./job_post1.php">Job Post Create</a></li>
-                            <li><a href="">Job Post Update</a></li>
                         </ul>   
                     </li>
                     <li class="nav-label">Apps</li>
