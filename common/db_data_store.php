@@ -35,6 +35,20 @@ foreach($categories as $category){
     insertData('categories',$mysqli,$category);
 }
 
+//industry_type
+$industry_type = [
+    ['name' => 'Manufacturing'],
+    ['name' => 'Constution'],
+    ['name' => 'Eduation'],
+    ['name' => 'Tehnology'],
+    ['name' => 'Advertising'],
+    ['name' => 'Transportation'],
+    ['name' => 'Telecommunication'],
+];
+foreach($industry_type as $ind_type){
+    insertData('industry_type',$mysqli,$ind_type);
+}
+
 //experience
 $experience = [
     ['type' => '1~2 Years'],

@@ -5,7 +5,7 @@ require "../common/url.php";
 require "../common/database.php";
 require "../common/common_funtion.php";
 
-if ($_SESSION['role'] == 'employer') {
+if ($_SESSION['role'] != 'user') {
   $url = $base_url . "index.php?error=Role error";
   header("Location:$url");
   exit();

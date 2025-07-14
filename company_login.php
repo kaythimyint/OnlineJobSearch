@@ -35,11 +35,11 @@ if (isset($_POST['form_submit']) && $_POST['form_submit']=='1') {
                 $_SESSION['email'] = $data['email'];
                 $_SESSION['role'] = $data['role'];
                 $_SESSION['id'] = $data['id'];
-                if ($data['role'] == 'admin') {
-                    $url = $admin_base_url."index.php?success=Login Success";
+                if ($data['role'] == 'employer') {
+                    $url = $company_base_url."index.php?success=Login Success";
                     header("Location:$url");
                 }else{
-                    $url = $company_base_url."index.php?success=Login Success";
+                    $url = $base_url.'index.php?error=Role error';
                     header("Location:$url");
                 }
             }else{

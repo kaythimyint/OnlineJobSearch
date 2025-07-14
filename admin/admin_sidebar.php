@@ -33,6 +33,10 @@
                             <div class="" style="border:1px dotted silver;"></div>
                         </div>
                         <div>
+                            <a href="<?= $admin_base_url."industry_type.php" ?>" class="btn btn-lg">Industy Type</a>
+                            <div class="" style="border:1px dotted silver;"></div>
+                        </div>
+                        <div>
                             <a href="<?= $admin_base_url."location_city.php" ?>" class="btn btn-lg">Location City</a>
                             <div class="" style="border:1px dotted silver;"></div>
                         </div>

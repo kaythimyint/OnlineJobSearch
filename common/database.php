@@ -66,6 +66,15 @@ function create_table($mysqli)
             )";
     if ($mysqli->query($sql) === false) return false;
 
+    //Industry_type Table
+    $sql = "CREATE TABLE IF NOT EXISTS `industry_type`(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(30) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )";
+    if ($mysqli->query($sql) === false) return false;
+
     //Companies Table
     $sql = "CREATE TABLE IF NOT EXISTS `companies`(
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -78,11 +87,11 @@ function create_table($mysqli)
             address VARCHAR(50) NOT NULL,
             password VARCHAR(50) NOT NULL,
             confirm_password VARCHAR(50) NOT NULL,
-            category_id INT NOT NULL,
+            industry_type_id INT NOT NULL,
             profile VARCHAR(50) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+            FOREIGN KEY (industry_type_id) REFERENCES industry_type(id) ON DELETE CASCADE
             )";
     if ($mysqli->query($sql) === false) return false;
 
@@ -108,15 +117,6 @@ function create_table($mysqli)
     $sql = "CREATE TABLE IF NOT EXISTS `experience`(
             id INT AUTO_INCREMENT PRIMARY KEY,
             type VARCHAR(30) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )";
-    if ($mysqli->query($sql) === false) return false;
-
-    //Job_post_categories Table
-    $sql = "CREATE TABLE IF NOT EXISTS `job_post_categories`(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
@@ -159,11 +159,11 @@ function create_table($mysqli)
         salary_id INT NOT NULL,
         vacancy INT NOT NULL,
         description TEXT NOT NULL,
+        benefit TEXT NOT NULL,
         job_type_id INT NOT NULL,
         location_city_id INT NOT NULL,
         location_township_id INT NOT NULL,
-        job_post_category_id INT NOT NULL,
-        posted_date VARCHAR(20) NOT NULL,
+        category_id INT NOT NULL,
         deadline VARCHAR(20) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -174,7 +174,7 @@ function create_table($mysqli)
         FOREIGN KEY (job_type_id) REFERENCES job_type(id) ON DELETE CASCADE,
         FOREIGN KEY (location_city_id) REFERENCES location_city(id) ON DELETE CASCADE,
         FOREIGN KEY (location_township_id) REFERENCES location_township(id) ON DELETE CASCADE,
-        FOREIGN KEY (job_post_category_id) REFERENCES job_post_categories(id) ON DELETE CASCADE
+        FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
         )";
     if ($mysqli->query($sql) === false) return false;
 
