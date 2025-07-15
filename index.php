@@ -6,7 +6,7 @@ require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
 
-$sql = "SELECT companies.*,job_post.job_title_id AS title_id,job_title.name AS title_name
+$sql = "SELECT companies.*,job_post.job_title_id AS title_id,job_post.id AS post_id,job_title.name AS title_name
                     FROM `companies`
                     LEFT JOIN `job_post` ON companies.id=job_post.company_id
                     LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
@@ -105,7 +105,41 @@ $todayDate = date('Y-m-d H:i:s');
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color:darkblue">
+  <nav class="navbar navbar-expand-md navbar-dark" style="background-color:darkblue">
+    <div class="container-fluid">
+        <a class="navbar-brand ms-5 text-black" href="#">
+            <img src="./img/logo.jpg" alt="" style="width:60px;height:60px;border-radius:50%;">
+        </a>
+        <button class="navbar-toggler me-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end me-5" id="collapsibleNavbar">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item mb-1">
+                    <a class="nav-link text-light me-3" href="#home">Home</a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link text-light me-3" href="#job">Jobs</a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link text-light me-3" href="#company">Companies</a>
+                </li>
+                <li class="nav-item me-3 mb-1">
+                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
+                        <i class="fa-regular fa-user me-2"></i>User Login
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . 'company_login.php' ?>" style="background-color:gold;">
+                        <i class="fa-regular fa-user me-2"></i>Companies Login
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+  <!-- <nav class="navbar navbar-expand-sm navbar-dark" style="background-color:darkblue">
     <div class="container-fluid d-flex justify-content-between">
       <a class="navbar-brand ms-5 text-black" href="#"><img src="./img/logo.jpg" alt="" style="width:60px;height:60px;border-radius:50%;"></a>
       <div class="me-5">
@@ -135,7 +169,7 @@ $todayDate = date('Y-m-d H:i:s');
         </div>
       </div>
     </div>
-  </nav>
+  </nav> -->
 
   <section id="home">
     <section id="home" class="header_img d-flex align-items-center" style="height:80vh; background-image: url('./img/company2.jpg'); background-size: cover; background-position: center; position: relative;">
@@ -219,12 +253,15 @@ $todayDate = date('Y-m-d H:i:s');
         <div class="row">
           <?php
           if ($select_company->num_rows>0) {
-            while($company = $select_company->fetch_assoc()){ ?>
+            while($company = $select_company->fetch_assoc()){ 
+              if (empty($company['post_id'])) { 
+                continue;
+              }?>
               <div class="col-lg-4 col-md-6 col-12">
                 <div class="card mb-3 shadow">
                   <div class="card-body">
                     <div class="d-flex justify-content-between gap-4">
-                      <img src="./img/company_profile1.jpg" alt="" style="width:60px;height:60px;">
+                      <img src="<?= $base_url.'upload/'.$company['profile'] ?>" alt="" style="width:60px;height:60px;">
                       <div>
                         <h5><?= $company['title_name'] ?></h5>
                         <a href=""><?= $company['company_name'] ?></a>

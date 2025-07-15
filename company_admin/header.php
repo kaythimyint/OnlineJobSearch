@@ -95,7 +95,7 @@ if ($select_res->num_rows > 0) {
                         <ul class="navbar-nav header-right">
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                                    <i class="mdi mdi-account"></i>
+                                    <img src="<?= $base_url.'upload/'.$data['profile'] ?>" alt="" style="width:60px;height:60px;border-radius:50%">
                                 </a>
  
                                 <div class="dropdown-menu dropdown-menu-right">

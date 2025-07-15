@@ -4,10 +4,15 @@ require "common_funtion.php";
 
 //job_title
 $job_title = [
-    ['name' => 'Junior Java Developer'],
-    ['name' => 'Senior Java Developer'],
-    ['name' => 'Junior PHP Developer'],
-    ['name' => 'Senior PHP Developer'],
+    ['name' => 'Junior Developer'],
+    ['name' => 'Senior Developer'],
+    ['name' => 'Senior Admin Assistant'],
+    ['name' => 'Operation supervisor'],
+    ['name' => 'Sale & Marketing Supervisor (Urgent)'],
+    ['name' => 'Human Resources Manager'],
+    ['name' => 'Warehouse Staff'],
+    ['name' => 'Finance & Accounting Executive'],
+    ['name' => 'Electrical Engineer'],
 ];
 foreach($job_title as $title){
     insertData('job_title',$mysqli,$title);
@@ -30,6 +35,10 @@ $categories = [
     ['name' => 'Eduation & Training'],
     ['name' => 'Data Entry'],
     ['name' => 'Customer Service & Support'],
+    ['name' => 'HR/Office'],
+    ['name' => 'Store / Warehousing'],
+    ['name' => 'Engineering'],
+    ['name' => 'Accounting/Finance'],
 ];
 foreach($categories as $category){
     insertData('categories',$mysqli,$category);
@@ -68,6 +77,7 @@ $salarys = [
     ['type' => 'MMK: 300,000 ~ 400,000'],
     ['type' => 'MMK: 400,000 ~ 500,000'],
     ['type' => 'MMK: 500,000 ~ 600,000'],
+    ['type' => 'Negotiation'],
 ];
 foreach($salarys as $salary){
     insertData('salary',$mysqli,$salary);
