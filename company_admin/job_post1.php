@@ -1,4 +1,4 @@
-<?php
+ww<?php
 require "./header.php";
 $error=false;
 $category = 
@@ -438,7 +438,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
             <div class="row my-3">
                 <div class="col-12 d-flex justify-content-end">
                     <input type="hidden" name="form_sub" value="1">
-                    <button type="submit" class="btn btn-warning py-3 px-4 text-white  fw-bold" style="font-size:15pt;">Next</button>
+                    <button type="submit" class="btn btn-warning py-3 px-4 text-white  fw-bold" style="font-size:15pt;">Create</button>
                 </div>
             </div>
         </form>

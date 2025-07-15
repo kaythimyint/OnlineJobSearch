@@ -223,7 +223,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   --cyan: #3065D0;
   --white: #fff;
   --gray: #6c757d;
-  --gray-dark: #343a40;
+  --gray-dark: #343a40;   
   --primary: #593bdb;
   --secondary: #673BB7;
   --success: #7ED321;
@@ -250,7 +250,8 @@ html {
   font-family: sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);  
+ }
 
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
@@ -261,7 +262,7 @@ body {
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #BDBDC7;
+  color: black !important;
   text-align: left;
   background-color: rgba(88, 115, 254, 0.04); }
 
@@ -275,7 +276,8 @@ hr {
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
-  margin-bottom: 0.5rem; }
+  margin-bottom: 0.5rem;
+color: black !important;   }
 
 p {
   margin-top: 0;

@@ -49,7 +49,7 @@ if ($select_res->num_rows > 0) {
     <!-- Pick date -->
     <link rel="stylesheet" href="./vendor/pickadate/themes/default.css">
     <link rel="stylesheet" href="./vendor/pickadate/themes/default.date.css">
-    <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">  
     <script src="./js/plugins-init/bs-daterange-picker-init.js"></script>
     <script src="../js/jquery.min.js"></script>
 </head> 

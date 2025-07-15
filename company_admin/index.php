@@ -23,7 +23,7 @@ $select_res = $mysqli->query($sql);
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table text-center">
+                        <table class="table text-center" style="color: black !important;">
                             <thead>
                                 <tr>
                                     <th class="col-1">ID No</th>
@@ -52,8 +52,8 @@ $select_res = $mysqli->query($sql);
                                 <?php
                                     }
                                 }else{ ?>
-                                    <tr colspan="6">
-                                        <td>No data</td>
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; font-weight: bold;">No data</td>
                                     </tr>
                                 <?php
                                 }

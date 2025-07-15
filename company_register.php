@@ -138,7 +138,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         ];
         $result = insertData('companies',$mysqli,$data);
         if ($result) {
-            $url = $base_url . "company_profile.php";
+            $url = $base_url . 'company_profile.php?id='.$mysqli->insert_id;
             header("Location: $url");
             exit;
         }else{

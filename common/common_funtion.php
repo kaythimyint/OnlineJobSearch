@@ -18,7 +18,7 @@ function insertData($table,$mysqli,$values){
 }
 
 function selectData($table,$mysqli,$where='',$select='*',$order=''){
-    $sql = "SELECT $select FROM $table  $where $order";
+    $sql = "SELECT $select FROM $table $where $order";
     return $mysqli->query($sql);
 }
 

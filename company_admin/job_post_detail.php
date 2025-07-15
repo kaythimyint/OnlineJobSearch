@@ -25,8 +25,14 @@ if (isset($_GET['detail_id']) && $_GET['detail_id'] != '') {
     exit();
 }
 ?>
-<div class="content-body">
-    <div class="container">
+
+<style>
+    
+h1, h2, h3, h4, h5, h6 {
+color: black !important;   }
+</style>
+<div class="content-body" >
+    <div class="container"  style="color: black !important;">
         <div class="row mb-3">
             <div class="col-12 d-flex justify-content-end">
                 <input type="hidden" name="form_sub" value="1">
@@ -39,65 +45,65 @@ if (isset($_GET['detail_id']) && $_GET['detail_id'] != '') {
             </div>
             <div class="col-12 col-md-12 col-lg-4">
                 <div class="pt-4">
-                    <h4>Job Category</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px">
-                        <h5><?= $detail_res['category_name'] ?></h5>
+                    <h5>Job Category</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0  5px 20px ;border-radius:10px;justify-content:center;;">
+                        <span><?= $detail_res['category_name'] ?></span>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <h4>Job Title</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px">
-                        <h5><?= $detail_res['title_name'] ?></h5>
+                    <h5>Job Title</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px">
+                        <span><?= $detail_res['title_name'] ?></span>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <h4>Job Type</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px">
-                        <h5><?= $detail_res['jobtype_name'] ?></h5>
+                    <h5>Job Type</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px">
+                        <span><?= $detail_res['jobtype_name'] ?></span>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <h4>Experience</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px">
-                        <h5><?= $detail_res['experience_type'] ?></h5>
+                    <h5>Experience</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px">
+                        <span><?= $detail_res['experience_type'] ?></span>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <h4>Salary</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px">
-                        <h5><?= $detail_res['salary_type'] ?></h5>
+                    <h5>Salary</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px">
+                        <span><?= $detail_res['salary_type'] ?></span>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <h4>City</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px">
-                        <h5><?= $detail_res['city_name'] ?></h5>
+                    <h5>City</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px">
+                        <span><?= $detail_res['city_name'] ?></span>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <h4>Township</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px">
-                        <h5><?= $detail_res['township_name'] ?></h5>
+                    <h5>Township</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px">
+                        <span><?= $detail_res['township_name'] ?></span>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-12 col-lg-8">
                 <div class="pt-4">
-                    <h4>Description</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px;height:200px">
-                        <h5><?= $detail_res['description'] ?></h5>
+                    <h5>Description</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px;height:200px">
+                        <span><?= $detail_res['description'] ?></span>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <h4>Requirement</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px;height:200px">
-                        <h5><?= $detail_res['requirements'] ?></h5>
+                    <h5>Requirement</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px;height:200px">
+                        <span><?= $detail_res['requirements'] ?></span>
                     </div>
                 </div>
                 <div class="py-4">
-                    <h4>Benefit</h4> 
-                    <div style="border: 0.5px solid gray;padding:5px 0 0 20px ;border-radius:10px;height:200px">
-                        <h5><?= $detail_res['benefit'] ?></h5>
+                    <h5>Benefit</h5> 
+                    <div style="border: 0.5px solid gray;padding:5px 0 5px 20px ;border-radius:10px;height:200px">
+                        <span><?= $detail_res['benefit'] ?></span>
                     </div>
                 </div>
             </div>
