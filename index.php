@@ -1,10 +1,22 @@
 <?php
+date_default_timezone_set('Asia/Yangon');
+error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
 // session_start();
 require "./common/url.php";
 require "./common/database.php";
+require "./common/common_funtion.php";
 
-// var_dump($_SESSION['name']);
+$sql = "SELECT companies.*,job_post.job_title_id AS title_id,job_title.name AS title_name
+                    FROM `companies`
+                    LEFT JOIN `job_post` ON companies.id=job_post.company_id
+                    LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
+                    ";
+$select_company = $mysqli->query($sql);
+
+$todayDate = date('Y-m-d H:i:s');
+// var_dump($todayDate);
 // die();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -205,20 +217,47 @@ require "./common/database.php";
       </div>
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile1.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
+          <?php
+          if ($select_company->num_rows>0) {
+            while($company = $select_company->fetch_assoc()){ ?>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="card mb-3 shadow">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between gap-4">
+                      <img src="./img/company_profile1.jpg" alt="" style="width:60px;height:60px;">
+                      <div>
+                        <h5><?= $company['title_name'] ?></h5>
+                        <a href=""><?= $company['company_name'] ?></a>
+                        <?php
+                        $created_at = $company['created_at']; // e.g., "2025-07-15 13:21:19"
+
+                        $today = new DateTime($todayDate);
+                        $created = new DateTime($created_at);
+
+                        $interval = $created->diff($today);
+
+                        // echo $interval->format('%H hours %i minutes %s seconds ago');
+                        // echo $interval->format('%H hours ago');
+                        // die();
+                        // $post_time = $company['created_at'] - $todayDate ;
+                        // var_dump($todayDate);
+                        // var_dump($company['created_at']);
+                        // var_dump($post_time);
+                        // die();
+
+                        // $dateTime = new DateTime($post_time);
+                        // $dateOnly = $dateTime->format('Y-m-d');
+                        ?>
+                        <p class="mt-1"><?= $interval->format('%h hours ago') ?></p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+          <?php
+            }
+          }
+          ?>
           <div class="col-lg-4 col-md-6 col-12">
             <div class="card mb-3 shadow">
               <div class="card-body">

@@ -19,10 +19,13 @@ $select_res = $mysqli->query($sql);
                 <a href="./job_post1.php" class="btn btn-primary py-3 px-4 text-white fw-bold" style="font-size:15pt;">Job Create</a>
             </div>
         </div>
-        <div class="row">
+        <div class="row shadow border">
+            <div class="col-12 p-3 mb-3" style="background-color: darkblue;">
+                <h2 class="text-light">Job Post List</h2>
+            </div>
             <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
+                <!-- <div class="card">
+                    <div class="card-body"> -->
                         <table class="table text-center" style="color: black !important;">
                             <thead>
                                 <tr>
@@ -60,8 +63,8 @@ $select_res = $mysqli->query($sql);
                                 ?>
                             </tbody>
                         </table>
-                    </div>
-                </div>
+                    <!-- </div>
+                </div> -->
             </div>
         </div>
     </div>

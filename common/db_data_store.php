@@ -124,20 +124,20 @@ foreach($users as $user){
     insertData('users',$mysqli,$user);
 }
 
-//company
-$companies = [
-    [
-        'company_name' => 'Company1',
-        'ceo_name' => 'CEO1',
-        'name' => 'Companyuser1',
-        'email' => 'companyuser1@gmail.com',
-        'password' => md5('password'),
-        'phone' => '0912345679',
-        'address' => 'Yangon',
-        'role' => 'employer',
-    ],
-];
-foreach($companies as $company){
-    insertData('companies',$mysqli,$company);
-}
+// //company
+// $companies = [
+//     [
+//         'company_name' => 'Company1',
+//         'ceo_name' => 'CEO1',
+//         'name' => 'Companyuser1',
+//         'email' => 'companyuser1@gmail.com',
+//         'password' => md5('password'),
+//         'phone' => '0912345679',
+//         'address' => 'Yangon',
+//         'role' => 'employer',
+//     ],
+// ];
+// foreach($companies as $company){
+//     insertData('companies',$mysqli,$company);
+// }
 ?>

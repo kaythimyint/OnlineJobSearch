@@ -185,9 +185,9 @@ function create_table($mysqli)
         user_id INT NOT NULL,
         status VARCHAR(20) NOT NULL,
         application_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (job_post_id) REFERENCES job_post(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )";
+        if ($mysqli->query($sql) === false) return false;
 }
 ?>
