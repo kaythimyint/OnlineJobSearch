@@ -30,13 +30,18 @@ if (isset($_POST['form_submit']) && $_POST['form_submit']=='1') {
         $result = selectData('companies',$mysqli,"WHERE email='$email'");
         if ($result->num_rows >0) {
             $data = $result->fetch_assoc();
+            // var_dump($data);
+            // die();
             if ($data['password'] == $byscript_password) {
                 $_SESSION['name'] = $data['name'];
                 $_SESSION['email'] = $data['email'];
                 $_SESSION['role'] = $data['role'];
                 $_SESSION['id'] = $data['id'];
+                // var_dump($_SESSION['id']);
+                //     die();
                 if ($data['role'] == 'employer') {
                     $url = $company_base_url."index.php?success=Login Success";
+                    
                     header("Location:$url");
                 }else{
                     $url = $base_url.'index.php?error=Role error';

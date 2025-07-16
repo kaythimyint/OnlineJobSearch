@@ -33,12 +33,6 @@ color: black !important;   }
 </style>
 <div class="content-body" >
     <div class="container"  style="color: black !important;">
-        <div class="row mb-3">
-            <div class="col-12 d-flex justify-content-end">
-                <input type="hidden" name="form_sub" value="1">
-                <a href="./index.php" class="btn btn-dark py-3 px-4 text-white fw-bold" style="font-size:15pt;">Back</a>
-            </div>
-        </div>
         <div class="row shadow">
             <div class="col-12 bg-primary p-2">
                 <h2 class="text-light">Job Detail</h2>
@@ -106,6 +100,12 @@ color: black !important;   }
                         <span><?= $detail_res['benefit'] ?></span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-12 d-flex justify-content-end">
+                <input type="hidden" name="form_sub" value="1">
+                <a href="./index.php" class="btn btn-dark py-3 px-4 text-white fw-bold" style="font-size:15pt;">Back</a>
             </div>
         </div>
     </div>

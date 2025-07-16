@@ -42,17 +42,19 @@ if (isset($_POST['form_submit']) && $_POST['form_submit']=='1') {
     if (strlen($file_name) == 0) {
         $error = true;
         $profile_error = "Profile image is require.";
-    }else{
+    }
 
+    if (!$error) {
+        
         $folder = "upload/";
-
+    
         $allow_file = ['png','jpg','jpeg'];
-
+    
         $all_extension = explode('.',$file_name);
         $end_extension =strtolower(end($all_extension));
-
+    
         $tmp_name = $profile['tmp_name'];
-
+    
         if (!in_array($end_extension,$allow_file)) {
             $error = true;
             $profile_error = "Allow only jpg,png,jpeg";
@@ -80,31 +82,6 @@ if (isset($_POST['form_submit']) && $_POST['form_submit']=='1') {
         exit();
         }
     }
-    // if (!$error) {
-    //     $result = selectData('users',$mysqli,"WHERE email='$email'");
-    //     if ($result->num_rows >0) {
-    //         $data = $result->fetch_assoc();
-    //         if ($data['password'] == $byscript_password) {
-    //             $_SESSION['name'] = $data['name'];
-    //             $_SESSION['email'] = $data['email'];
-    //             $_SESSION['role'] = $data['role'];
-    //             $_SESSION['id'] = $data['id'];
-    //             if ($data['role'] == 'admin') {
-    //                 $url = $admin_base_url."index.php?success=Login Success";
-    //                 header("Location:$url");
-    //             }else{
-    //                 $url = $user_base_url."index.php?success=Login Success";
-    //                 header("Location:$url");
-    //             }
-    //         }else{
-    //             $error = true;
-    //             $password_error  = "Password is incorrect.";
-    //         }
-    //     }else{
-    //         $error = true;
-    //         $email_error  = "This email is not register.";
-    //     }
-    // }
 }
 ?>
 

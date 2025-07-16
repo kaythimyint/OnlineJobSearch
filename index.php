@@ -6,9 +6,9 @@ require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
 
-$sql = "SELECT companies.*,job_post.job_title_id AS title_id,job_post.id AS post_id,job_title.name AS title_name
-                    FROM `companies`
-                    LEFT JOIN `job_post` ON companies.id=job_post.company_id
+$sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,job_title.name AS title_name
+                    FROM `job_post`
+                    LEFT JOIN `companies` ON companies.id=job_post.company_id
                     LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
                     ";
 $select_company = $mysqli->query($sql);
@@ -253,15 +253,12 @@ $todayDate = date('Y-m-d H:i:s');
         <div class="row">
           <?php
           if ($select_company->num_rows>0) {
-            while($company = $select_company->fetch_assoc()){ 
-              if (empty($company['post_id'])) { 
-                continue;
-              }?>
+            while($company = $select_company->fetch_assoc()){ ?>
               <div class="col-lg-4 col-md-6 col-12">
                 <div class="card mb-3 shadow">
                   <div class="card-body">
-                    <div class="d-flex justify-content-between gap-4">
-                      <img src="<?= $base_url.'upload/'.$company['profile'] ?>" alt="" style="width:60px;height:60px;">
+                    <div class="d-flex justify-content-center gap-4">
+                      <img src="<?= $base_url.'upload/'.$company['company_profile'] ?>" alt="" style="width:60px;height:60px;">
                       <div>
                         <h5><?= $company['title_name'] ?></h5>
                         <a href=""><?= $company['company_name'] ?></a>

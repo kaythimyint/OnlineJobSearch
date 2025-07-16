@@ -10,7 +10,7 @@
 ?>
 <div class="container py-5">
     <div class="row">
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-xl-4 col-lg-5 col-md-7 col-sm-10 mb-3">
             <div class="card">
                 <img class="card-img-top pt-2" src="../img/profile.jpg" alt="Card image" style="width: 95%;height:230px;margin:auto">
                 <div class="card-body">

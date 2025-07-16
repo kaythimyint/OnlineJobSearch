@@ -3,11 +3,13 @@ require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
 
+$industry_type_result = selectData('industry_type',$mysqli);
+
 $employer_error = false;
 $company_name =
 $companyName_error = 
-$ceo_name =
-$ceoName_error =
+$industry_type =
+$industryType_error =
 $employer_name =
 $employerName_error =
 $employer_phone =
@@ -23,7 +25,7 @@ $employerConfirmPassword_error = '';
 
 if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     
-    $ceo_name = $mysqli->real_escape_string($_POST['ceo_name']);
+    $industry_type = $mysqli->real_escape_string($_POST['industry_type']);
     $company_name = $mysqli->real_escape_string($_POST['company_name']);
     $employer_name = $mysqli->real_escape_string($_POST['employer_name']);
     $employer_phone = $mysqli->real_escape_string($_POST['employer_phone']);
@@ -46,16 +48,10 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $companyName_error  = "Company Name less than 50 character.";
     }
 
-    //CEO Name validation
-    if (strlen($ceo_name) == 0) {
+    //Industry type validation
+    if (strlen($industry_type) == 0) {
         $employer_error = true;
-        $ceoName_error  = "CEO Name is require";
-    } else if (strlen($ceo_name) <= 5) {
-        $employer_error = true;
-        $ceoName_error  = "CEO Name greater than 5 character.";
-    } else if (strlen($ceo_name) >= 50) {
-        $employer_error = true;
-        $ceoName_error  = "CEO Name less than 50 character.";
+        $industryType_error  = "Industry Type is require";
     }
 
     //User Name validation
@@ -110,7 +106,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $employer_error = true;
         $employerConfirmPassword_error  = "Password must be same.";
     } else {
-        $employer_error = false;
+        // $employer_error = false;
         $byscript_employerpassword = md5($employer_password);
     }
 
@@ -126,25 +122,31 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $employerAddress_error  = "Address less than 30 character.";
     }
     if (!$employer_error) {
-        $data =[
-            'company_name'  => $company_name,
-            'ceo_name'      => $ceo_name,
-            'name'          => $employer_name,
-            'email'         => $employer_email,
-            'phone'         => $employer_phone,
-            'address'       => $employer_address,
-            'password'      => $byscript_employerpassword,
-            'role'          => 'employer'
-        ];
-        $result = insertData('companies',$mysqli,$data);
-        if ($result) {
-            $url = $base_url . 'company_profile.php?id='.$mysqli->insert_id;
-            header("Location: $url");
-            exit;
+        $select_email = selectData('companies',$mysqli,"WHERE email='$employer_email'");
+        if ($select_email->num_rows == 0) {
+            $data =[
+                'company_name'      => $company_name,
+                'industry_type_id'  => $industry_type,
+                'name'              => $employer_name,
+                'email'             => $employer_email,
+                'phone'             => $employer_phone,
+                'address'           => $employer_address,
+                'password'          => $byscript_employerpassword,
+                'role'              => 'employer'
+            ];
+            $result = insertData('companies',$mysqli,$data);
+            if ($result) {
+                $url = $base_url . 'company_login.php?Register Success!';
+                header("Location: $url");
+                exit;
+            }else{
+                $url = $base_url . "index.php?error=Register not success";
+                header("Location: $url");
+                exit;
+            }
         }else{
-            $url = $base_url . "index.php?error=Register not success";
-            header("Location: $url");
-            exit;
+            $employer_error = true;
+            $employerEmail_error = "This email is already register.";
         }
     }
 }
@@ -240,16 +242,16 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                             ?>
                                         </div>
                                     </div>
-                                    <div class=" form-group mb-3">
-                                        <label for="name" class="text-light fw-bold mb-2">User Name</label>
+                                    <div class="form-group mb-3">
+                                        <label for="email" class="text-light fw-bold mb-2">Email</label>
                                         <div class="d-flex border border-info rounded">
                                             <i class="fa-regular fa-user" style="font-size:20pt;color:white;background-color: blue;padding:8px;margin:5px;border-radius:7px"></i>
-                                            <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $employer_name ?>" id="name" placeholder="User Name" name="employer_name">
+                                            <input type="email" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $employer_email ?>" id="email" placeholder="Enter email address" name="employer_email">
                                         </div>
                                         <div style="height: 20px;">
                                             <?php
-                                            if ($employerName_error && $employer_error) { ?>
-                                                <small class="form-text text-danger"><?= $employerName_error ?></small>
+                                            if ($employerEmail_error && $employer_error) { ?>
+                                                <small class="form-text text-danger"><?= $employerEmail_error ?></small>
                                             <?php
                                             }
                                             ?>
@@ -301,31 +303,41 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                                     </div> -->
                                 </div>
                                 <div class="col-6">
-                                    <div class="form-group mb-3">
-                                        <label for="ceo_name" class="text-light fw-bold mb-2">Company CEO</label>
+                                    <div class=" form-group mb-3">
+                                        <label for="name" class="text-light fw-bold mb-2">User Name</label>
                                         <div class="d-flex border border-info rounded">
                                             <i class="fa-regular fa-user" style="font-size:20pt;color:white;background-color: blue;padding:8px;margin:5px;border-radius:7px"></i>
-                                            <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $ceo_name ?>" id="ceo_name" placeholder="Company CEO" name="ceo_name">
+                                            <input type="text" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $employer_name ?>" id="name" placeholder="User Name" name="employer_name">
                                         </div>
                                         <div style="height: 20px;">
                                             <?php
-                                            if ($ceoName_error && $employer_error) { ?>
-                                                <small class="form-text text-danger"><?= $ceoName_error ?></small>
+                                            if ($employerName_error && $employer_error) { ?>
+                                                <small class="form-text text-danger"><?= $employerName_error ?></small>
                                             <?php
                                             }
                                             ?>
                                         </div>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="email" class="text-light fw-bold mb-2">Email</label>
+                                        <label for="industry_type" class="text-light fw-bold mb-2">Industry Type</label>
                                         <div class="d-flex border border-info rounded">
                                             <i class="fa-regular fa-user" style="font-size:20pt;color:white;background-color: blue;padding:8px;margin:5px;border-radius:7px"></i>
-                                            <input type="email" class="form-control" style="background-color: inherit;border:none;color:white;" value="<?= $employer_email ?>" id="email" placeholder="Enter email address" name="employer_email">
+                                            <select name="industry_type" id="industry_type" class="form-control" style="background-color:darkblue;border:none;color:white;">
+                                                <option value="">Industry Type</option>
+                                                <?php 
+                                                if ($industry_type_result->num_rows>0) {
+                                                    while($type_res = $industry_type_result->fetch_assoc()){ ?>
+                                                        <option value="<?= $type_res['id'] ?>" <?= $industry_type == $type_res['id'] ? 'selected' :'' ?>><?= $type_res['name'] ?></option>
+                                                <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                         <div style="height: 20px;">
                                             <?php
-                                            if ($employerEmail_error && $employer_error) { ?>
-                                                <small class="form-text text-danger"><?= $employerEmail_error ?></small>
+                                            if ($industryType_error && $employer_error) { ?>
+                                                <small class="form-text text-danger"><?= $industryType_error ?></small>
                                             <?php
                                             }
                                             ?>

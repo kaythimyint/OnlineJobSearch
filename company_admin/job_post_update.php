@@ -189,12 +189,6 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
 <div class="content-body">
     <div class="container">
         <form action="" method="POST">
-            <div class="row mb-3">
-                <div class="col-12 d-flex justify-content-end">
-                    <input type="hidden" name="form_sub" value="1">
-                    <a href="./index.php" class="btn btn-dark py-3 px-4 text-white  fw-bold" style="font-size:15pt;">Back</a>
-                </div>
-            </div>
             <div class="row border shadow">
                 <div class="col-12 p-3 mb-3" style="background-color: darkblue;">
                     <h2 class="text-light">First Information</h2>
@@ -446,8 +440,9 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                 </div>
             </div>
             <div class="row my-3">
-                <div class="col-12 d-flex justify-content-end">
+                <div class="col-12 d-flex justify-content-between">
                     <input type="hidden" name="form_sub" value="1">
+                    <a href="./index.php" class="btn btn-dark py-3 px-4 text-white  fw-bold" style="font-size:15pt;">Back</a>
                     <button type="submit" class="btn btn-warning py-3 px-4 text-white  fw-bold" style="font-size:15pt;">Update</button>
                 </div>
             </div>

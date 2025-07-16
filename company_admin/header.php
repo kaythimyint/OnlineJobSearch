@@ -53,7 +53,14 @@ if ($select_res->num_rows > 0) {
     <script src="./js/plugins-init/bs-daterange-picker-init.js"></script>
     <script src="../js/jquery.min.js"></script>
 </head> 
-
+<style>
+    .profile{
+    background-color: gold;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    }
+</style>
 <body>
     
 
@@ -95,11 +102,17 @@ if ($select_res->num_rows > 0) {
                         <ul class="navbar-nav header-right">
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                                    <img src="<?= $base_url.'upload/'.$data['profile'] ?>" alt="" style="width:60px;height:60px;border-radius:50%">
+                                    <?php
+                                    if (empty($data['profile'])) { ?>
+                                        <img src="../img/profile2.jpg" alt="" style="width:40px;height:40px;border-radius:50%">
+                                    <?php
+                                    }else{ ?>
+                                        <img src="<?= $base_url.'upload/'.$data['profile'] ?>" alt="" style="width:60px;height:60px;border-radius:50%">
+                                    <?php } ?>
                                 </a>
  
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="./app-profile.html" class="dropdown-item">
+                                    <a href="./company_profile.php" class="dropdown-item">
                                         <i class="icon-user"></i>
                                         <span class="ml-2"><?= $data['name'] ?></span>
                                     </a>
@@ -129,30 +142,31 @@ if ($select_res->num_rows > 0) {
         <div class="quixnav">
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
-                    <li class="nav-label first">Main Menu</li>
+                    
+                    <li class="nav-label">EMPLOYER</li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                                class="icon icon-single-04"></i><span class="nav-text">Job Post</span></a>
+                                class="icon icon-single-04"></i><span class="nav-text">Profile</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="./company_profile.php">Profile Picture</a></li>
+                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Profile Update</a>
+                                <!-- <ul aria-expanded="false">
+                                    <li><a href="./email-compose.html">Compose</a></li>
+                                    <li><a href="./email-inbox.html">Inbox</a></li>
+                                    <li><a href="./email-read.html">Read</a></li>
+                                </ul> -->
+                            </li>
+                            <!-- <li><a href="./app-calender.html">Calendar</a></li> -->
+                        </ul>
+                    </li>
+                    <li class="nav-label first">JOB</li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                                class="icon icon-app-store"></i><span class="nav-text">Job Post</span></a>
                         <ul aria-expanded="false">
                             <li><a href="./index.php">Job Post List</a></li>
                             <li><a href="./job_post1.php">Job Post Create</a></li>
                         </ul>   
                     </li>
-                    <li class="nav-label">Apps</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                                class="icon icon-app-store"></i><span class="nav-text">Apps</span></a>
-                        <ul aria-expanded="false">
-                            <li><a href="./app-profile.html">Profile</a></li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Email</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="./email-compose.html">Compose</a></li>
-                                    <li><a href="./email-inbox.html">Inbox</a></li>
-                                    <li><a href="./email-read.html">Read</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./app-calender.html">Calendar</a></li>
-                        </ul>
-                    </li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                    <!-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                                 class="icon icon-chart-bar-33"></i><span class="nav-text">Charts</span></a>
                         <ul aria-expanded="false">
                             <li><a href="./chart-flot.html">Flot</a></li>
@@ -162,8 +176,8 @@ if ($select_res->num_rows > 0) {
                             <li><a href="./chart-sparkline.html">Sparkline</a></li>
                             <li><a href="./chart-peity.html">Peity</a></li>
                         </ul>
-                    </li>
-                    <li class="nav-label">Components</li>
+                    </li> -->
+                    <!-- <li class="nav-label">Components</li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                                 class="icon icon-world-2"></i><span class="nav-text">Bootstrap</span></a>
                         <ul aria-expanded="false">
@@ -238,7 +252,7 @@ if ($select_res->num_rows > 0) {
                             </li>
                             <li><a href="./page-lock-screen.html">Lock Screen</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
 

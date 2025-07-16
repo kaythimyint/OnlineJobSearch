@@ -79,7 +79,6 @@ function create_table($mysqli)
     $sql = "CREATE TABLE IF NOT EXISTS `companies`(
             id INT AUTO_INCREMENT PRIMARY KEY,
             company_name VARCHAR(50) NOT NULL,
-            ceo_name VARCHAR(30) NOT NULL,
             name VARCHAR(30) NOT NULL,
             email VARCHAR(30) NOT NULL UNIQUE,
             role ENUM('admin','employer') NOT NULL,

@@ -1,5 +1,6 @@
-ww<?php
+<?php
 require "./header.php";
+
 $error=false;
 $category = 
 $category_error =
@@ -25,6 +26,17 @@ $requirement =
 $requirement_error = 
 $benefit = 
 $benefit_error = '';
+
+$company_select = selectData('companies',$mysqli,"WHERE id = $id");
+if ($company_select->num_rows>0) {
+    $company_data = $company_select->fetch_assoc();
+
+    if (empty($company_data['profile'])) {
+        
+        echo "<script>window.location.href='./company_profile.php?error=Profile picture require'</script>";
+        exit();
+    }
+}
 
 $categories_result = selectData('categories',$mysqli);
 $title_result = selectData('job_title',$mysqli);
