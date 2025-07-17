@@ -16,7 +16,7 @@ require "../admin/admin_sidebar.php";
 ?>
 
 
-        <div class="col-12 col-md-9">
+        <div class="col-12 col-md-12 col-lg-8">
            <div class="d-flex justify-content-between align-items-center mb-2">
                 <h1>Township List</h1>
                 <a href="<?= $admin_base_url."location_township_create.php" ?>" class="btn btn-primary btn-lg">Create</a>

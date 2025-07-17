@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('Asia/Yangon');
-error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
+// error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
 // session_start();
 require "./common/url.php";
 require "./common/database.php";
@@ -117,10 +117,10 @@ $todayDate = date('Y-m-d H:i:s');
         <div class="collapse navbar-collapse justify-content-end me-5" id="collapsibleNavbar">
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item mb-1">
-                    <a class="nav-link text-light me-3" href="#home">Home</a>
+                    <a class="nav-link text-light me-3" href="<?= $base_url.'index.php'?>">Home</a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a class="nav-link text-light me-3" href="#job">Jobs</a>
+                    <a class="nav-link text-light me-3" href="<?= $base_url.'jobs.php' ?>">Jobs</a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link text-light me-3" href="#company">Companies</a>

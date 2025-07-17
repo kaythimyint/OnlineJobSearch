@@ -38,7 +38,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
 }
 require "../admin/admin_sidebar.php";
 ?>
-        <div class="col-12 col-md-9">
+        <div class="col-12 col-md-12 col-lg-8">
            <div class="d-flex justify-content-between align-items-center mb-2">
                 <h1>Job Category Create</h1>
                 <a href="<?= $admin_base_url."industry_type.php" ?>" class="btn btn-dark btn-lg">Back</a>
