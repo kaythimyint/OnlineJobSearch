@@ -4,6 +4,8 @@ require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
 
+$_SESSION['id'] = $user_id;
+
 $error = false;
 $email =
 $email_error =

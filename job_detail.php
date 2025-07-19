@@ -1,14 +1,23 @@
 <?php
+session_start();
 require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
 
-if (!empty($_GET['id'])) {
+$id = '';
+
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
+} elseif (isset($_GET['id'])) {
     $id = $_GET['id'];
+}
+
+if (!empty($id)) {
 
     $sql = "SELECT job_post.*, job_title.name AS title_name, companies.company_name AS company_name,
         categories.name AS category_name, salary.type AS salary_range,job_type.name AS jobtype_name,
-        location_city.name AS city_name, location_township.name AS township_name
+        location_city.name AS city_name, location_township.name AS township_name,
+        experience.type AS experience_type,industry_type.name AS industry_name
         FROM job_post
         LEFT JOIN job_title ON job_post.job_title_id=job_title.id
         LEFT JOIN companies ON job_post.company_id=companies.id
@@ -17,15 +26,53 @@ if (!empty($_GET['id'])) {
         LEFT JOIN job_type ON job_post.job_type_id=job_type.id
         LEFT JOIN location_city ON job_post.location_city_id=location_city.id
         LEFT JOIN location_township ON job_post.location_township_id=location_township.id
+        LEFT JOIN experience ON job_post.experience_id=experience.id
+        LEFT JOIN industry_type ON companies.industry_type_id=industry_type.id
         WHERE job_post.id = '$id'";
 
     $job_post = $mysqli->query($sql);
     if ($job_post->num_rows>0) {
         $post = $job_post->fetch_assoc();
+    }else {
+        echo "<script>window.location.href='jobs.php?error=jobnotfound';</script>";
+        exit();
     }
 }else{
     echo "<script>window.location.href='jobs.php?error=idnotfound';</script>";
     exit();
+}
+
+if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
+    
+    if (!isset($_SESSION['id'])) {
+        echo "
+        <script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'You must log in first.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                window.location.href = 'user_login.php'; 
+            });
+        </script>
+        ";
+        exit();
+    }else{
+        echo "
+        <script>
+            Swal.fire({
+                title: 'Success!',
+                text: 'You have successfully applied for this job.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                window.location.href = 'jobs.php';
+            });
+        </script>
+        ";
+        exit();
+    }
 }
 
 ?>
@@ -36,6 +83,8 @@ if (!empty($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Search</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
@@ -43,7 +92,6 @@ if (!empty($_GET['id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/regular.min.css">
     <script src="./js/jquery.min.js"></script>
     <link rel="stylesheet" href="./bootstrap-5.3.6-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
@@ -158,12 +206,38 @@ if (!empty($_GET['id'])) {
             </div>
             <div class="col-12 col-md-12 col-lg-4">
                 <div class="my-2">
-                    <div class="card ">
+                    <div class="card shadow mb-2">
                         <h2 style="background-color: darkblue;color:white;padding:10px">Job Summary</h2>
                         <div class="card-body">
-                             
+                            <label class="mb-2"><span>Published on: </span> <?= date( "d F Y", strtotime( $post['created_at'] ) ) ?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Vacancy: </span> <?=  $post['vacancy'] ?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Employment Status: </span> <?=  $post['jobtype_name'] ?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Expeience: </span> <?=  $post['experience_type'] ?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Job category: </span> <?=  $post['category_name'] ?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Working indutry: </span> <?=  $post['industry_name'] ?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Gender: </span>  </label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Age: </span>  </label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Job location: </span> <?=  $post['city_name'].'('.$post['township_name'].')'?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Salary Range: </span> <?=  $post['salary_range'] ?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
+                            <label class="mb-2"><span>Application deadline: </span> <?=  $post['deadline']?></label class="mb-2">
+                            <div style="border: 0.5px dashed lightgrey;width:90%;" class="mb-2"></div>
                         </div>
                     </div>
+                    <form action="" method="POST">
+                        <input type="hidden" name="form_sub" value="1">
+                        <input type="hidden" name="id" value="<?= $post['id'] ?>">
+                        <button type="submit" class="btn btn-warning w-100 text-light fw-bold fs-4"><i class="fa-solid fa-link"></i> Apply Job</button>
+                    </form>
                 </div>
             </div>
         </div>
