@@ -7,38 +7,32 @@ $select_city = selectData('Location_city',$mysqli);
 $select_category = selectData('categories',$mysqli);
 $select_job_type = selectData('job_type',$mysqli);
 $select_salary = selectData('salary',$mysqli);
-$sql = "SELECT job_post.* ,job_title.name AS title_name,companies.company_name AS company_name,
-        categories.name AS category_name,salary.type AS salary_range,
-        location_city.name AS city_name,location_township.name AS township_name
-        FROM `job_post`
-        LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
-        LEFT JOIN `companies` ON job_post.company_id=companies.id
-        LEFT JOIN `categories` ON job_post.category_id=categories.id
-        LEFT JOIN `salary` ON job_post.salary_id=salary.id
-        LEFT JOIN `location_city` ON job_post.location_city_id=location_city.id
-        LEFT JOIN `location_township` ON job_post.location_township_id=location_township.id
-        ";
-$job_display = $mysqli->query($sql);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Search</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/regular.min.css">
-  <link rel="stylesheet" href="./bootstrap-5.3.6-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Search</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/regular.min.css">
+    <script src="./js/jquery.min.js"></script>
+    <link rel="stylesheet" href="./bootstrap-5.3.6-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: calibri;
     }
 
     h2 ,h4{
@@ -61,6 +55,13 @@ $job_display = $mysqli->query($sql);
       background-size: cover;
       background-position: center;
     }
+    span,h5
+    {
+        font-family:"Share Tech", sans-serif;
+        font-weight: 800;
+        font-style: normal;
+    }
+    
   </style>
 </head>
 
@@ -145,7 +146,7 @@ $job_display = $mysqli->query($sql);
                         while($data = $select_category->fetch_assoc())
                         { ?>
                             <div class="d-flex">
-                            <input type="checkbox" name="" id="">
+                            <input type="checkbox" name="" id="" class="search-box"  value="<?= $data['name'] ?>">
                             <li class="list-group-item border-0"><?= $data['name'] ?></li>
                             </div>
                     <?php
@@ -178,7 +179,7 @@ $job_display = $mysqli->query($sql);
                 <ul class="list-group ps-2">
                     <li class="list-group-item border-0">
                         <div class="d-flex justify-content-between">
-                            <h4>Job Type</h4>
+                            <h4>Salary Range</h4>
                             <i class="fa-solid fa-caret-down"></i>
                         </div>
                     </li>
@@ -196,21 +197,8 @@ $job_display = $mysqli->query($sql);
                     ?>
                 </ul>
             </div>
-        <div class="col-lg-8">
-            <?php
-            if ($job_display->num_rows>0) {
-                while($data = $job_display->fetch_assoc()){ ?>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5><?= $data['title_name'] ?></h5>
-                            <span><?= $data['company_name'] ?></span><span><?= $data['city_name'].','?></span><span><?= $data['township_name'] ?></span>
-                            <p><?= $data['description'] ?></p>
-                        </div>
-                    </div>
-            <?php
-                }
-            }
-            ?>
+        <div class="col-lg-8 card-show">
+            
         </div>
     </div>
     </div>
@@ -266,7 +254,68 @@ $job_display = $mysqli->query($sql);
     </div>
     </div>
 </footer>
+<script>
+$(document).ready(function(){
+    function loadJobs(category = '') {
+        $.ajax({
+            url: 'jobs_api.php',
+            type: 'POST',
+            data: category ? {categories: category} : {},
+            dataType: 'json',
+            success: function(response){
+                let html = '';
 
+                if(response.message){
+                    
+                    $.ajax({
+                        url: 'jobs_api.php',
+                        type: 'POST',
+                        data: {}, 
+                        dataType: 'json',
+                        success: function(defaultResponse){
+                            defaultResponse.jobs.forEach(function(job){
+                                html += generateJobCard(job);
+                            });
+                            $('.card-show').html(html);
+                        }
+                    });
+                } else {
+                    response.jobs.forEach(function(job){
+                        html += generateJobCard(job);
+                    });
+                    $('.card-show').html(html);
+                }
+            }
+        });
+    }
+
+    function generateJobCard(job){
+        return `
+        <div class="card mb-2 shadow">
+            <div class="card-body">
+                <h5>${job.title}</h5>
+                <span class="me-5">${job.company}</span>
+                <i class="fa-solid fa-location-dot"></i> ${job.city}, ${job.township}
+                <p class="pt-3">${job.description}</p>
+                <div class="d-flex justify-content-between">
+                    <p class="pt-2">${job.salary}</p>
+                    <p class="pt-2"><i class="fa-solid fa-calendar-days"></i> ${job.deadline}</p>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    // Load default jobs on page load
+    loadJobs();
+
+    // Filter jobs by category
+    $('.search-box').click(function(){
+        let searchValue = $(this).val();
+        loadJobs(searchValue);
+    });
+});
+
+</script>
 </body>
 
 </html>

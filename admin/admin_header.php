@@ -73,10 +73,10 @@ if ($_SESSION['role'] == 'user') {
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link text-light me-3" href="#home">Home</a>
+              <a class="nav-link text-light me-3" href="<?= $base_url.'index.php'?>">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-light me-3" href="#job">Jobs</a>
+              <a class="nav-link text-light me-3" href="<?= $base_url.'index.php'?>">Jobs</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-light me-3" href="#company">Companies</a>
