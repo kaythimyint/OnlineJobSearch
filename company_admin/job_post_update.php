@@ -24,13 +24,17 @@ $description_error =
 $requirement = 
 $requirement_error = 
 $benefit = 
-$benefit_error = '';
+$benefit_error = 
+$job_post_res = '';
 
 $update_id = isset($_GET['update_id']) ? $_GET['update_id'] : '';
 
 $job_post_result =selectData('job_post',$mysqli,"WHERE id = '$update_id'");
 if ($job_post_result->num_rows>0) {
     $job_post_res = $job_post_result->fetch_assoc();
+}else{
+    echo "<script>window.location.href='index.php?error=idnotfound';</script>";
+    exit();
 }
 
 $categories_result = selectData('categories',$mysqli);

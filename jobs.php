@@ -104,7 +104,7 @@ $select_salary = selectData('salary',$mysqli);
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <img src="./img/jobsimage.jpg" alt="" style="height: 270px;width:100%">
+                <img src="./img/jobsimage.jpg" alt="" style="height: 230px;width:100%">
             </div>
         </div>
         <div class="row mt-2">
@@ -255,66 +255,78 @@ $select_salary = selectData('salary',$mysqli);
     </div>
 </footer>
 <script>
-$(document).ready(function(){
-    function loadJobs(category = '') {
-        $.ajax({
-            url: 'jobs_api.php',
-            type: 'POST',
-            data: category ? {categories: category} : {},
-            dataType: 'json',
-            success: function(response){
-                let html = '';
+    $(document).ready(function(){
+        function loadJobs(category = '') {
+            $.ajax({
+                url: 'jobs_api.php',
+                type: 'POST',
+                data: category ? {categories: category} : {},
+                dataType: 'json',
+                success: function(response){
+                    // console.log(response);
+                    let html = '';
 
-                if(response.message){
-                    
-                    $.ajax({
-                        url: 'jobs_api.php',
-                        type: 'POST',
-                        data: {}, 
-                        dataType: 'json',
-                        success: function(defaultResponse){
-                            defaultResponse.jobs.forEach(function(job){
-                                html += generateJobCard(job);
-                            });
-                            $('.card-show').html(html);
-                        }
-                    });
-                } else {
-                    response.jobs.forEach(function(job){
-                        html += generateJobCard(job);
-                    });
-                    $('.card-show').html(html);
+                    if(response.message){
+                        
+                        $.ajax({
+                            url: 'jobs_api.php',
+                            type: 'POST',
+                            data: {}, 
+                            dataType: 'json',
+                            success: function(defaultResponse){
+                                defaultResponse.jobs.forEach(function(job){
+                                    html += generateJobCard(job);
+                                });
+                                $('.card-show').html(html);
+                            }
+                        });
+                    } else {
+                        response.jobs.forEach(function(job){
+                            html += generateJobCard(job);
+                        });
+                        $('.card-show').html(html);
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
 
-    function generateJobCard(job){
-        return `
-        <div class="card mb-2 shadow">
-            <div class="card-body">
-                <h5>${job.title}</h5>
-                <span class="me-5">${job.company}</span>
-                <i class="fa-solid fa-location-dot"></i> ${job.city}, ${job.township}
-                <p class="pt-3">${job.description}</p>
-                <div class="d-flex justify-content-between">
-                    <p class="pt-2">${job.salary}</p>
-                    <p class="pt-2"><i class="fa-solid fa-calendar-days"></i> ${job.deadline}</p>
+        function generateJobCard(job){
+            console.log(job.id);
+            return `
+            <div class="card mb-2 shadow click_card" data-id="${job.id}">
+                <div class="card-body">
+                    <h5>${job.title}</h5>
+                    <span class="me-5">${job.company}</span>    
+                    <i class="fa-solid fa-location-dot"></i> ${job.city}, ${job.township}
+                    <i class="fa-solid fa-id-card ms-2"></i> Job ID : ${job.id}
+                    <p class="pt-3">${job.description}</p>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <p class="pt-2">${job.salary}</p>
+                        <p class="pt-2"><i class="fa-solid fa-calendar-days"></i> ${job.deadline}</p>
+                    </div>
                 </div>
-            </div>
-        </div>`;
-    }
+            </div>`;
+        }
 
-    // Load default jobs on page load
-    loadJobs();
+        // Load default jobs on page load
+        loadJobs();
 
-    // Filter jobs by category
-    $('.search-box').click(function(){
-        let searchValue = $(this).val();
-        loadJobs(searchValue);
+        // Filter jobs by category
+        $('.search-box').click(function(){
+            let searchValue = $(this).val();
+            loadJobs(searchValue);
+        });
+
+        $(document).on('click','.click_card',function(){
+
+            const id = parseInt($(this).data('id'));
+            console.log(id);
+
+            if (!Number.isNaN(id) && id > 0) {
+                window.location.href = 'job_detail.php?id=' + id;
+            }
+        })
     });
-});
-
 </script>
 </body>
 

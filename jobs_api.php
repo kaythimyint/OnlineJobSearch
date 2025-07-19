@@ -27,6 +27,7 @@ $sql = "SELECT job_post.*, job_title.name AS title_name, companies.company_name 
 if (!empty($category)) {
     $sql .= " WHERE categories.name = '$category'";
 }
+$sql .= " ORDER BY job_post.id DESC"; 
 
 $result = $mysqli->query($sql);
 
@@ -34,6 +35,7 @@ $jobs = [];
 if ($result->num_rows > 0) {
     while ($data = $result->fetch_assoc()) {
         $jobs[] = [
+            'id'   => $data['id'],
             'title' => $data['title_name'],
             'company' => $data['company_name'],
             'category' => $data['category_name'],
