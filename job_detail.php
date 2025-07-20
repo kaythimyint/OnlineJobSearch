@@ -44,34 +44,60 @@ if (!empty($id)) {
 
 if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     
-    if (!isset($_SESSION['id'])) {
-        echo "
-        <script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'You must log in first.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            }).then(function() {
-                window.location.href = 'user_login.php'; 
-            });
-        </script>
-        ";
+    if (!isset($_SESSION['id']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'user') {
+        $_SESSION['alert'] = [
+            'title' => 'Error!',
+            'text' => 'Only user accounts can apply for jobs. Please log in as a user.  ',
+            'icon' => 'error',
+            'confirmButtonText' => 'OK',
+            'redirect' => 'user_login.php'
+        ];
+        header("Location: job_detail.php?id=$id");
         exit();
     }else{
-        echo "
-        <script>
-            Swal.fire({
-                title: 'Success!',
-                text: 'You have successfully applied for this job.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then(function() {
-                window.location.href = 'jobs.php';
-            });
-        </script>
-        ";
-        exit();
+        $user_id = $_SESSION['id'];
+        $job_post_id = $id;
+
+        $check_result = selectData('applications',$mysqli,"WHERE user_id='$user_id' AND job_post_id='$job_post_id'");
+
+        if ($check_result->num_rows > 0) {
+            $_SESSION['alert'] = [
+                'title' => 'Warning!',
+                'text' => 'You have already applied for this job.',
+                'icon' => 'warning',
+                'confirmButtonText' => 'OK',
+                'redirect' => 'jobs.php'
+            ];
+            header("Location: job_detail.php?id=$id");
+            exit();
+        }
+        $value =[
+            'job_post_id' => $id,
+            'user_id'     => $user_id,
+            'status'      => 'pending'
+        ];
+        $insert_sql = insertData('applications',$mysqli,$value);
+        if ($insert_sql) {
+             $_SESSION['alert'] = [
+                'title' => 'Success!',
+                'text' => 'You have successfully applied for this job.',
+                'icon' => 'success',
+                'confirmButtonText' => 'OK',
+                'redirect' => 'jobs.php'
+            ];
+            header("Location: job_detail.php?id=$id");
+            exit();
+        }else{
+            $_SESSION['alert'] = [
+                'title' => 'Error!',
+                'text' => 'Something went wrong. Please try again later.',
+                'icon' => 'error',
+                'confirmButtonText' => 'OK',
+                'redirect' => 'jobs.php'
+            ];
+            header("Location: job_detail.php?id=$id");
+            exit();
+        }
     }
 }
 
@@ -134,6 +160,24 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
 </head>
 
 <body>
+    <?php 
+    if (isset($_SESSION['alert'])) { ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: '<?= $_SESSION['alert']['title'] ?>',
+                    text: '<?= $_SESSION['alert']['text'] ?>',
+                    icon: '<?= $_SESSION['alert']['icon'] ?>',
+                    confirmButtonText: '<?= $_SESSION['alert']['confirmButtonText'] ?>'
+                }).then(function() {
+                    window.location.href = '<?= $_SESSION['alert']['redirect'] ?>';
+                });
+            });
+        </script>
+    <?php
+    unset($_SESSION['alert']);
+    }
+    ?>
 <nav class="navbar navbar-expand-md navbar-dark" style="background-color:darkblue">
     <div class="container-fluid">
         <a class="navbar-brand ms-5 text-black" href="#">

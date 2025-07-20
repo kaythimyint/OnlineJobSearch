@@ -8,6 +8,7 @@ $select_category = selectData('categories',$mysqli);
 $select_job_type = selectData('job_type',$mysqli);
 $select_salary = selectData('salary',$mysqli);
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -143,11 +144,11 @@ $select_salary = selectData('salary',$mysqli);
                     </li>
                     <?php
                     if ($select_category->num_rows>0) {
-                        while($data = $select_category->fetch_assoc())
+                        while($category = $select_category->fetch_assoc())
                         { ?>
                             <div class="d-flex">
-                            <input type="checkbox" name="" id="" class="search-box"  value="<?= $data['name'] ?>">
-                            <li class="list-group-item border-0"><?= $data['name'] ?></li>
+                            <input type="checkbox" name="" id="" class="category-search-box"  value="<?= $category['name'] ?>">
+                            <li class="list-group-item border-0"><?= $category['name'] ?></li>
                             </div>
                     <?php
                         }
@@ -164,11 +165,11 @@ $select_salary = selectData('salary',$mysqli);
                     </li>
                     <?php
                     if ($select_job_type->num_rows>0) {
-                        while($data = $select_job_type->fetch_assoc())
+                        while($job_type = $select_job_type->fetch_assoc())
                         { ?>
                             <div class="d-flex">
-                            <input type="checkbox" name="" id="">
-                            <li class="list-group-item border-0"><?= $data['name'] ?></li>
+                            <input type="checkbox" name="" id="" class="jobtype-search-box"  value="<?= $job_type['name'] ?>">
+                            <li class="list-group-item border-0"><?= $job_type['name'] ?></li>
                             </div>
                     <?php
                         }
@@ -185,11 +186,11 @@ $select_salary = selectData('salary',$mysqli);
                     </li>
                     <?php
                     if ($select_salary->num_rows>0) {
-                        while($data = $select_salary->fetch_assoc())
+                        while($salary = $select_salary->fetch_assoc())
                         { ?>
                             <div class="d-flex">
-                            <input type="checkbox" name="" id="">
-                            <li class="list-group-item border-0"><?= $data['type'] ?></li>
+                            <input type="checkbox" name="" id="" class="salary-search-box"  value="<?= $salary['type'] ?>">
+                            <li class="list-group-item border-0"><?= $salary['type'] ?></li>
                             </div>
                     <?php
                         }
@@ -256,43 +257,60 @@ $select_salary = selectData('salary',$mysqli);
 </footer>
 <script>
     $(document).ready(function(){
-        function loadJobs(category = '') {
-            $.ajax({
-                url: 'jobs_api.php',
-                type: 'POST',
-                data: category ? {categories: category} : {},
-                dataType: 'json',
-                success: function(response){
-                    // console.log(response);
-                    let html = '';
 
-                    if(response.message){
-                        
-                        $.ajax({
-                            url: 'jobs_api.php',
-                            type: 'POST',
-                            data: {}, 
-                            dataType: 'json',
-                            success: function(defaultResponse){
-                                defaultResponse.jobs.forEach(function(job){
-                                    html += generateJobCard(job);
-                                });
-                                $('.card-show').html(html);
-                            }
-                        });
-                    } else {
-                        response.jobs.forEach(function(job){
-                            html += generateJobCard(job);
-                        });
-                        $('.card-show').html(html);
-                    }
+    function collectFilters(){
+        let categories = [];
+        let job_types = [];
+        let salaries = [];
+
+        $('.category-search-box:checked').each(function(){
+            categories.push($(this).val());
+        });
+
+        $('.jobtype-search-box:checked').each(function(){
+            job_types.push($(this).val());
+        });
+
+        $('.salary-search-box:checked').each(function(){
+            salaries.push($(this).val());
+        });
+
+        return {
+            categories: categories,
+            job_types: job_types,
+            salaries: salaries
+        };
+    }
+
+    function clearFilters() {
+        $('.category-search-box, .jobtype-search-box, .salary-search-box').prop('checked', false);
+    }
+
+    function loadJobs(filters = {}){
+        $.ajax({
+            url: 'jobs_api.php',
+            type: 'POST',
+            data: filters,
+            dataType: 'json',
+            success: function(response){
+                let html = '';
+                if(response.jobs){
+                    response.jobs.forEach(function(job){
+                        html += generateJobCard(job);
+                    });
+                }else{
+                    // html = '<p class="text-center text-danger">No jobs found</p>';
+                    loadJobs(); // Reload all jobs if no matches (recursive call)
+                    return;
                 }
-            });
-        }
+                $('.card-show').html(html);
+                clearFilters();  // Clear checkboxes after each search
+            }
+        });
+    }
 
-        function generateJobCard(job){
-            console.log(job.id);
-            return `
+    function generateJobCard(job){
+        return `
             <div class="card mb-2 shadow click_card" data-id="${job.id}">
                 <div class="card-body">
                     <h5>${job.title}</h5>
@@ -306,28 +324,44 @@ $select_salary = selectData('salary',$mysqli);
                     </div>
                 </div>
             </div>`;
-        }
+    }
 
-        // Load default jobs on page load
-        loadJobs();
+    // Initial load
+    loadJobs();
 
-        // Filter jobs by category
-        $('.search-box').click(function(){
-            let searchValue = $(this).val();
-            loadJobs(searchValue);
-        });
-
-        $(document).on('click','.click_card',function(){
-
-            const id = parseInt($(this).data('id'));
-            console.log(id);
-
-            if (!Number.isNaN(id) && id > 0) {
-                window.location.href = 'job_detail.php?id=' + id;
-            }
-        })
+    // Handle checkboxes with auto-uncheck behavior (simulate radio buttons)
+    $('.category-search-box').click(function(){
+        $('.category-search-box').not(this).prop('checked', false); // uncheck others
+        let filters = collectFilters();
+        loadJobs(filters);
     });
+
+    $('.jobtype-search-box').click(function(){
+        $('.jobtype-search-box').not(this).prop('checked', false);
+        let filters = collectFilters();
+        loadJobs(filters);
+    });
+
+    $('.salary-search-box').click(function(){
+        $('.salary-search-box').not(this).prop('checked', false);
+        let filters = collectFilters();
+        loadJobs(filters);
+    });
+
+    // Handle search button click and prevent reload
+    
+
+    // Card click
+    $(document).on('click','.click_card',function(){
+        const id = parseInt($(this).data('id'));
+        if (!Number.isNaN(id) && id > 0) {
+            window.location.href = 'job_detail.php?id=' + id;
+        }
+    });
+
+});
 </script>
+
 </body>
 
 </html>
