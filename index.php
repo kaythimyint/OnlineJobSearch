@@ -123,7 +123,7 @@ $todayDate = date('Y-m-d H:i:s');
                     <a class="nav-link text-light me-3" href="<?= $base_url.'jobs.php' ?>">Jobs</a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a class="nav-link text-light me-3" href="#company">Companies</a>
+                    <a class="nav-link text-light me-3" href="<?= $base_url.'companies.php' ?>">Companies</a>
                 </li>
                 <li class="nav-item me-3 mb-1">
                     <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
