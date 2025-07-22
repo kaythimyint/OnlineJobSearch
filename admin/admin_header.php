@@ -82,7 +82,7 @@ if ($_SESSION['role'] == 'user') {
               <a class="nav-link text-light me-3" href="#company">Companies</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  text-light px-4 py-3 rounded" href="<?php $admin_base_url . 'index.php' ?>" style="background-color:gold;">Dashboard</a>
+              <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $admin_base_url . 'index.php' ?>" style="background-color:gold;">Dashboard</a>
             </li>
           </ul>
         </div>

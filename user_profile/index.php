@@ -2,6 +2,8 @@
     
 require "./user_header.php";
 
+$select_application = selectData('applications',$mysqli,"WHERE user_id = '$id'","COUNT(*) as total_application");
+
 ?>
         <div class="col-12 col-lg-8 col-md-12">
             <div class="row my-3">
@@ -10,12 +12,21 @@ require "./user_header.php";
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                <h1>0</h1>
+                                <?php
+                                if ($select_application->num_rows>0) {
+                                    $application = $select_application->fetch_assoc();?>
+                                        <h1><?= $application['total_application'] ?></h1>
+                                <?php
+                                    }else{ ?>
+                                        <h1>0</h1>
+                                <?php
+                                    }
+                                ?>
                                 <p>Total Jobs Apply</p>
                             </div>
                             <div class="text-center">
                                 <i class="fa-regular fa-file fs-2 text-warning"></i>
-                                <a href="" class="btn btn-warning d-block mt-1 text-light fw-bold"><small>View All</small></a>
+                                <a href="<?= $user_base_url.'user_application.php' ?>" class="btn btn-warning d-block mt-1 text-light fw-bold"><small>View All</small></a>
                             </div>
                             </div>
                         </div>

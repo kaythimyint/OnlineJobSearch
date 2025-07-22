@@ -50,7 +50,6 @@ function create_table($mysqli)
             profile VARCHAR(50) NOT NULL,
             cv VARCHAR(50) NOT NULL,
             dateofbrith DATE NOT NULL,
-            nationalid VARCHAR(30) NOT NULL,
             role ENUM('admin','user') NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -85,7 +84,6 @@ function create_table($mysqli)
             phone VARCHAR(20) NOT NULL,
             address VARCHAR(50) NOT NULL,
             password VARCHAR(50) NOT NULL,
-            confirm_password VARCHAR(50) NOT NULL,
             industry_type_id INT NOT NULL,
             profile VARCHAR(50) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -182,7 +180,7 @@ function create_table($mysqli)
         id INT AUTO_INCREMENT PRIMARY KEY,
         job_post_id INT NOT NULL,
         user_id INT NOT NULL,
-        status VARCHAR(20) NOT NULL,
+        status ENUM('pending','checking','accept','reject') DEFAULT 'pending',
         application_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (job_post_id) REFERENCES job_post(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

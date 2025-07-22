@@ -1,7 +1,6 @@
 <?php
 
 require "../common/check_auth.php";
-require "../common/url.php";
 require "../common/database.php";
 require "../common/common_funtion.php";
 
@@ -127,7 +126,7 @@ if ($result->num_rows >0) {
             <?php
                 }
                 else{ ?>
-                  <img class="card-img-top pt-2" src="<?= $data['profile'] ?>" alt="Card image" style="width: 95%;height:230px;margin:auto">
+                  <img class="card-img-top pt-2" src="<?= $user_base_url.'profile/'.$data['profile'] ?>" alt="Card image" style="width: 95%;height:230px;margin:auto">
             <?php
                 }
             ?>

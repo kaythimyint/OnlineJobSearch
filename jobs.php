@@ -1,4 +1,5 @@
 <?php
+session_start();
 require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
@@ -87,16 +88,35 @@ $select_salary = selectData('salary',$mysqli);
                 <li class="nav-item mb-1">
                     <a class="nav-link text-light me-3" href="<?= $base_url.'companies.php' ?>  ">Companies</a>
                 </li>
-                <li class="nav-item me-3 mb-1">
-                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
-                        <i class="fa-regular fa-user me-2"></i>User Login
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . 'company_login.php' ?>" style="background-color:gold;">
-                        <i class="fa-regular fa-user me-2"></i>Companies Login
-                    </a>
-                </li>
+                <?php
+                if (empty($_SESSION['role'])) { ?>
+                  
+                  <li class="nav-item me-3 mb-1">
+                      <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
+                          <i class="fa-regular fa-user me-2"></i>User Login
+                      </a>
+                  </li>
+                  <li class="nav-item mb-1">
+                      <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . 'company_login.php' ?>" style="background-color:gold;">
+                          <i class="fa-regular fa-user me-2"></i>Companies Login
+                      </a>
+                  </li>
+                <?php
+                }else{ 
+                  if ($_SESSION['role']=='admin') { ?>
+                    <li class="nav-item">
+                      <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $admin_base_url.'index.php' ?>" style="background-color:gold;">Dashboard</a>
+                    </li>
+                  <?php
+                  }else if($_SESSION['role']=='user'){ ?>
+                    <li class="nav-item">
+                      <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $user_base_url.'index.php' ?>" style="background-color:gold;">Dashboard</a>
+                    </li>
+                  <?php
+                  }?>
+                <?php
+                }
+                ?>
             </ul>
         </div>
     </div>

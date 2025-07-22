@@ -5,6 +5,7 @@ require "../user_profile/user_header.php";
 // die();
 $error = false;
 $profile = 
+$profile_error = 
 $first_name =
 $firstName_error =
 $last_name =
@@ -23,16 +24,24 @@ $brith =
 $brith_error  = '';
 
 if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
+    $profile = isset($_FILES['profile'])?$_FILES['profile']:'';
     $first_name = $mysqli->real_escape_string($_POST['first_name']);
     $last_name = $mysqli->real_escape_string($_POST['last_name']);
     $user_email = $mysqli->real_escape_string($_POST['email']);
-    $national_id = $mysqli->real_escape_string($_POST['national_id']);
     $user_address = $mysqli->real_escape_string($_POST['address']);
     $user_phone = $mysqli->real_escape_string($_POST['phone']);
     $brith = $mysqli->real_escape_string($_POST['brith']);
     $user_name = $mysqli->real_escape_string($_POST['name']);
     $profile =  isset($_FILES['profile']) ? $_FILES['profile'] : null;
 
+    //profile validation
+    $file_name = $profile['name'];
+
+    if (strlen($file_name) == 0) {
+        $error = true;
+        $profile_error = "Profile image is require.";
+    }
+    
     //First Name validation
     if (strlen($first_name) == 0) {
         $error = true;
@@ -88,7 +97,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     } else if (strlen($user_phone) <= 6) {
         $error = true;
         $userPhone_error  = "Phone greater than 6 number.";
-    } else if (strlen($user_phone) >= 11) {
+    } else if (strlen($user_phone) > 11) {
         $error = true;
         $userPhone_error  = "Phone less than 11 number.";
     }
@@ -111,23 +120,29 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $brith_error  = "Date of brith is require";
     }
 
-    //Nationl ID validation
-    if (strlen($national_id) == 0) {
-        $error = true;
-        $national_id_error  = "Address is require";
-    } else if (strlen($national_id) <= 5) {
-        $error = true;
-        $national_id_error  = "Address greater than 5 character.";
-    } else if (strlen($national_id) >= 30) {
-        $error = true;
-        $national_id_error  = "Address less than 30 character.";
-    }
-    // var_dump($national_id);
-    // var_dump(!empty($data['nationalid'])? $data['nationalid'] : $national_id);
-    // die();
-
     if (!$error) {
+        $folder = "./profile/";
+    
+        $allow_file = ['png','jpg','jpeg'];
+    
+        $all_extension = explode('.',$file_name);
+        $end_extension =strtolower(end($all_extension));
+    
+        $tmp_name = $profile['tmp_name'];
+    
+        if (!in_array($end_extension,$allow_file)) {
+            $error = true;
+            $profile_error = "Allow only jpg,png,jpeg";
+        }else{
+            if (!file_exists($folder)) {
+                mkdir($folder,755);
+            }
+            $currentName = date("Ymd_His")."_".$file_name;
+            $savePath = $folder.$currentName;
+        }
+        
         $data = [
+            'profile' => $currentName,
             'first_name' => $first_name,
             'last_name' => $last_name,
             'name'      => $user_name,
@@ -143,7 +158,15 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $update_res = updateData('users',$mysqli,$data,$where);
 
         if ($update_res) {
-           echo "<script>window.location.href = 'index.php?success=Information update success';</script>";
+            $saveImg = move_uploaded_file($tmp_name,$savePath);
+            if ($saveImg) {
+                echo "<script>window.location.href='user_profile_update.php?sucess=Information update success';</script>";
+                exit();
+            }else{
+                echo "<script>window.location.href = 'user_profile_update.php?error=Image error';</script>";
+            }
+        }else{
+            echo "<script>window.location.href = 'user_profile_update.php?error=Data Update error';</script>";
         }
     }
 }
@@ -156,19 +179,24 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <div class="card-body d-flex">
                                 <?php
                                     if (!isset($data['profile']) || !$data['profile']) { ?>
-                                        <img src="../img/profile.jpg" alt="" style="width: 200px;height:200px;">
+                                        <img src="../img/profile.jpg" id="preview" style="width: 200px;height:200px;">
                                 <?php
                                     }
                                     else{ ?>
-                                        <img src="<?= $data['profile'] ?>" alt="" style="width: 200px;height:200px;">
+                                        <img src="<?= $user_base_url.'profile/'.$data['profile'] ?>" id="preview" style="width: 200px;height:200px;">
                                 <?php
                                     }
                                 ?>
                                 <div class="pt-5 ps-5">
                                     <label for="profile" class="profile mb-3">Selete Profile Image</label>
-                                    <input type="file" name="profile" style="display: none;" id="profile">
+                                    <input type="file" name="profile" style="display: none;" id="profile" >
                                     <p>Supported files are jpg,jpeg,png</p>
-                                    <small class="text-danger">Error</small>
+                                    <?php
+                                    if ($profile_error && $error) { ?>
+                                        <small class="text-danger"><?= $profile_error ?></small>
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -185,7 +213,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <label for="first_name" class="mb-2">First Name</label>
                             <div class="d-flex user_input">
                                 <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="text" class="form-control border-0 user_inputbox" name="first_name" value="<?= $data['first_name'] ?>" id="first_name" placeholder="First Name">
+                                <input type="text" class="form-control border-0 user_inputbox" name="first_name" value="<?= !empty($first_name)?$first_name:$data['first_name'] ?>" id="first_name" placeholder="First Name">
                             </div>
                             <?php
                                 if ($firstName_error && $error) { ?>
@@ -200,7 +228,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <label for="last_name" class="mb-2">last Name</label>
                             <div class="d-flex user_input">
                                 <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="text" class="form-control border-0 user_inputbox" name="last_name" value="<?= $data['last_name'] ?>" id="last_name" placeholder="Last Name">
+                                <input type="text" class="form-control border-0 user_inputbox" name="last_name" value="<?= !empty($last_name)?$last_name:$data['last_name'] ?>" id="last_name" placeholder="Last Name">
                             </div>
                             <?php
                                 if ($lastName_error && $error) { ?>
@@ -215,7 +243,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <label for="email" class="mb-2">Email</label>
                             <div class="d-flex user_input">
                                 <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="email" class="form-control border-0 user_inputbox" name="email" value="<?= $data['email'] ?>" id="email" placeholder="Email">
+                                <input type="email" class="form-control border-0 user_inputbox" name="email" value="<?= !empty($user_email)?$user_email:$data['email'] ?>" id="email" placeholder="Email">
                             </div>
                             <?php
                             if ($userEmail_error && $error) { ?>
@@ -230,7 +258,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <label for="address" class="mb-2">Address</label>
                             <div class="d-flex user_input">
                                 <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="text" class="form-control border-0 user_inputbox" name="address" value="<?= $data['address'] ?>" id="address" placeholder="Address">
+                                <input type="text" class="form-control border-0 user_inputbox" name="address" value="<?= !empty($user_address)?$user_address:$data['address'] ?>" id="address" placeholder="Address">
                             </div>
                             <?php
                             if ($userAddress_error && $error) { ?>
@@ -245,7 +273,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <label for="phone" class="mb-2">Phone</label>
                             <div class="d-flex user_input">
                                 <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="text" class="form-control border-0 user_inputbox" name="phone" value="<?= $data['phone'] ?>" id="phone" placeholder="Phone">
+                                <input type="text" class="form-control border-0 user_inputbox" name="phone" value="<?= !empty($user_phone)?$user_phone:$data['phone'] ?>" id="phone" placeholder="Phone">
                             </div>
                             <?php
                             if ($userPhone_error && $error) { ?>
@@ -260,7 +288,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                             <label for="brith" class="mb-2">Date of birth</label>
                             <div class="d-flex user_input">
                                 <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="date" class="form-control border-0 user_inputbox" name="brith" value="<?= !empty($data['dateofbrith']) ? $data['dateofbrith']: $brith ?>" id="brith" placeholder="Date of birth">
+                                <input type="date" class="form-control border-0 user_inputbox" name="brith" value="<?= !empty($brith)?$brith:$data['dateofbrith'] ?>" id="brith" placeholder="Date of birth">
                             </div>
                             <?php
                             if ($brith_error && $error) { ?>
@@ -272,25 +300,10 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     </div>   
                     <div class="col-12 col-xl-6">
                         <div class="form-group py-3">
-                            <label for="national_id" class="mb-2">National ID</label>
-                            <div class="d-flex user_input">
-                                <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="text" class="form-control border-0 user_inputbox" name="national_id" value="<?= !empty($data['nationalid']) ? $data['nationalid'] : $national_id ?>" id="national_id" placeholder="National ID">
-                            </div>
-                            <?php
-                            if ($national_id_error && $error) { ?>
-                                <small class="form-text text-danger"><?= $national_id_error ?></small>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                    </div>   
-                    <div class="col-12 col-xl-6">
-                        <div class="form-group py-3">
                             <label for="name" class="mb-2">User Name</label>
                             <div class="d-flex user_input">
                                 <i class="fa-regular fa-user" style="font-size:20pt;padding:8px;margin:5px;border-radius:7px"></i>
-                                <input type="text" class="form-control border-0 user_inputbox" name="name" value="<?= $data['name'] ?>" id="education" placeholder="User Name">
+                                <input type="text" class="form-control border-0 user_inputbox" name="name" value="<?= !empty($user_name)?$user_name:$data['name'] ?>" id="education" placeholder="User Name">
                             </div>
                             <?php
                             if ($userName_error && $error) { ?>

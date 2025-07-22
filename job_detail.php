@@ -58,46 +58,64 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $user_id = $_SESSION['id'];
         $job_post_id = $id;
 
-        $check_result = selectData('applications',$mysqli,"WHERE user_id='$user_id' AND job_post_id='$job_post_id'");
+        $user_data = selectData('users', $mysqli, "WHERE id = '$id'");
+        if ($user_data->num_rows>0) {
+            $data = $user_data->fetch_assoc();
+            if (empty($data['cv'])) {
+                $_SESSION['alert'] = [
+                        'title' => 'Warning!',
+                        'text' => 'Your CV or Resume require.',
+                        'icon' => 'warning',
+                        'confirmButtonText' => 'OK',
+                        'redirect' => $user_base_url.'user_resume.php'
+                    ];
+                    header("Location: job_detail.php?id=$id");
+                    exit();
+            }else{
 
-        if ($check_result->num_rows > 0) {
-            $_SESSION['alert'] = [
-                'title' => 'Warning!',
-                'text' => 'You have already applied for this job.',
-                'icon' => 'warning',
-                'confirmButtonText' => 'OK',
-                'redirect' => 'jobs.php'
-            ];
-            header("Location: job_detail.php?id=$id");
-            exit();
+                $check_result = selectData('applications',$mysqli,"WHERE user_id='$user_id' AND job_post_id='$job_post_id'");
+        
+                if ($check_result->num_rows > 0) {
+                    $_SESSION['alert'] = [
+                        'title' => 'Warning!',
+                        'text' => 'You have already applied for this job.',
+                        'icon' => 'warning',
+                        'confirmButtonText' => 'OK',
+                        'redirect' => 'jobs.php'
+                    ];
+                    header("Location: job_detail.php?id=$id");
+                    exit();
+                }
+                $value =[
+                    'job_post_id' => $id,
+                    'user_id'     => $user_id,
+                    'status'      => 'pending'
+                ];
+                $insert_sql = insertData('applications',$mysqli,$value);
+                if ($insert_sql) {
+                     $_SESSION['alert'] = [
+                        'title' => 'Success!',
+                        'text' => 'You have successfully applied for this job.',
+                        'icon' => 'success',
+                        'confirmButtonText' => 'OK',
+                        'redirect' => 'jobs.php'
+                    ];
+                    header("Location: job_detail.php?id=$id");
+                    exit();
+                }else{
+                    $_SESSION['alert'] = [
+                        'title' => 'Error!',
+                        'text' => 'Something went wrong. Please try again later.',
+                        'icon' => 'error',
+                        'confirmButtonText' => 'OK',
+                        'redirect' => 'jobs.php'
+                    ];
+                    header("Location: job_detail.php?id=$id");
+                    exit();
+                }
+            }
         }
-        $value =[
-            'job_post_id' => $id,
-            'user_id'     => $user_id,
-            'status'      => 'pending'
-        ];
-        $insert_sql = insertData('applications',$mysqli,$value);
-        if ($insert_sql) {
-             $_SESSION['alert'] = [
-                'title' => 'Success!',
-                'text' => 'You have successfully applied for this job.',
-                'icon' => 'success',
-                'confirmButtonText' => 'OK',
-                'redirect' => 'jobs.php'
-            ];
-            header("Location: job_detail.php?id=$id");
-            exit();
-        }else{
-            $_SESSION['alert'] = [
-                'title' => 'Error!',
-                'text' => 'Something went wrong. Please try again later.',
-                'icon' => 'error',
-                'confirmButtonText' => 'OK',
-                'redirect' => 'jobs.php'
-            ];
-            header("Location: job_detail.php?id=$id");
-            exit();
-        }
+
     }
 }
 

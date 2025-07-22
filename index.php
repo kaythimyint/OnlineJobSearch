@@ -1,10 +1,10 @@
 <?php
+session_start();
 date_default_timezone_set('Asia/Yangon');
-// error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
-// session_start();
-require "./common/url.php";
+
 require "./common/database.php";
 require "./common/common_funtion.php";
+require "./common/url.php";
 
 $sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,job_title.name AS title_name
                     FROM `job_post`
@@ -14,8 +14,6 @@ $sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profi
 $select_company = $mysqli->query($sql);
 
 $todayDate = date('Y-m-d H:i:s');
-// var_dump($todayDate);
-// die();
 
 ?>
 <!DOCTYPE html>
@@ -125,16 +123,35 @@ $todayDate = date('Y-m-d H:i:s');
                 <li class="nav-item mb-1">
                     <a class="nav-link text-light me-3" href="<?= $base_url.'companies.php' ?>">Companies</a>
                 </li>
-                <li class="nav-item me-3 mb-1">
-                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
-                        <i class="fa-regular fa-user me-2"></i>User Login
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . 'company_login.php' ?>" style="background-color:gold;">
-                        <i class="fa-regular fa-user me-2"></i>Companies Login
-                    </a>
-                </li>
+                <?php
+                if (empty($_SESSION['role'])) { ?>
+                  
+                  <li class="nav-item me-3 mb-1">
+                      <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
+                          <i class="fa-regular fa-user me-2"></i>User Login
+                      </a>
+                  </li>
+                  <li class="nav-item mb-1">
+                      <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . 'company_login.php' ?>" style="background-color:gold;">
+                          <i class="fa-regular fa-user me-2"></i>Companies Login
+                      </a>
+                  </li>
+                <?php
+                }else{ 
+                  if ($_SESSION['role']=='admin') { ?>
+                    <li class="nav-item">
+                      <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $admin_base_url.'index.php' ?>" style="background-color:gold;">Dashboard</a>
+                    </li>
+                  <?php
+                  }else if($_SESSION['role']=='user'){ ?>
+                    <li class="nav-item">
+                      <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $user_base_url.'index.php' ?>" style="background-color:gold;">Dashboard</a>
+                    </li>
+                  <?php
+                  }?>
+                <?php
+                }
+                ?>
             </ul>
         </div>
     </div>

@@ -149,11 +149,6 @@ if ($select_res->num_rows > 0) {
                         <ul aria-expanded="false">
                             <li><a href="./company_profile.php">Profile Picture</a></li>
                             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Profile Update</a>
-                                <!-- <ul aria-expanded="false">
-                                    <li><a href="./email-compose.html">Compose</a></li>
-                                    <li><a href="./email-inbox.html">Inbox</a></li>
-                                    <li><a href="./email-read.html">Read</a></li>
-                                </ul> -->
                             </li>
                             <!-- <li><a href="./app-calender.html">Calendar</a></li> -->
                         </ul>
@@ -166,17 +161,13 @@ if ($select_res->num_rows > 0) {
                             <li><a href="./job_post1.php">Job Post Create</a></li>
                         </ul>   
                     </li>
-                    <!-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                                class="icon icon-chart-bar-33"></i><span class="nav-text">Charts</span></a>
+                    <li class="nav-label">Apply Job</li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                                class="icon icon-chart-bar-33"></i><span class="nav-text">Apply Job</span></a>
                         <ul aria-expanded="false">
-                            <li><a href="./chart-flot.html">Flot</a></li>
-                            <li><a href="./chart-morris.html">Morris</a></li>
-                            <li><a href="./chart-chartjs.html">Chartjs</a></li>
-                            <li><a href="./chart-chartist.html">Chartist</a></li>
-                            <li><a href="./chart-sparkline.html">Sparkline</a></li>
-                            <li><a href="./chart-peity.html">Peity</a></li>
+                            <li><a href="./apply_job_list.php">List</a></li>
                         </ul>
-                    </li> -->
+                    </li>
                     <!-- <li class="nav-label">Components</li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                                 class="icon icon-world-2"></i><span class="nav-text">Bootstrap</span></a>
