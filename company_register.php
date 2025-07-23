@@ -114,9 +114,9 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     if (strlen($employer_address) == 0) {
         $employer_error = true;
         $employerAddress_error  = "Address is require";
-    } else if (strlen($employer_address) <= 5) {
+    } else if (strlen($employer_address) <= 3) {
         $employer_error = true;
-        $employerAddress_error  = "Address greater than 5 character.";
+        $employerAddress_error  = "Address greater than 3 character.";
     } else if (strlen($employer_address) >= 30) {
         $employer_error = true;
         $employerAddress_error  = "Address less than 30 character.";

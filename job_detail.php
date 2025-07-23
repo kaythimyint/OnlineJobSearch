@@ -252,17 +252,17 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     </div>
                     <div class="mt-3">
                         <h2>Description</h2>
-                        <p><?= $post['description'] ?></p>
+                        <p><?= nl2br(htmlspecialchars($post['description'])) ?></p>
                         <div class="border w-100"></div>
                     </div>
                     <div class="mt-3">
                         <h2>Requirement</h2>
-                        <p><?= $post['requirements'] ?></p>
+                        <p><?=  nl2br(htmlspecialchars($post['requirements'])) ?></p>
                         <div class="border w-100"></div>
                     </div>
                     <div class="mt-3">
                         <h2>Benefit</h2>
-                        <p><?= $post['benefit'] ?></p>
+                        <p><?=  nl2br(htmlspecialchars($post['benefit'])) ?></p>
                     </div>
                 </div>
             </div>

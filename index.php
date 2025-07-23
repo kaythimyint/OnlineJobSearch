@@ -10,10 +10,20 @@ $sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profi
                     FROM `job_post`
                     LEFT JOIN `companies` ON companies.id=job_post.company_id
                     LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
-                    ";
+                    ORDER BY RAND()
+                    LIMIT 10";
 $select_company = $mysqli->query($sql);
 
-$todayDate = date('Y-m-d H:i:s');
+$sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,job_title.name AS title_name
+                    FROM `job_post`
+                    LEFT JOIN `companies` ON companies.id=job_post.company_id
+                    LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
+                    ORDER BY job_post.created_at DESC
+                    LIMIT 10";
+$new_company = $mysqli->query($sql);
+
+$company_data = selectData('companies',$mysqli);
+
 
 ?>
 <!DOCTYPE html>
@@ -229,33 +239,16 @@ $todayDate = date('Y-m-d H:i:s');
       <div class="container pt-2 shadow-lg  rounded-3" style="height:140px">
         <div class="swiper mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./img/company_profile1.jpg" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile2.png" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile3.jpg" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile4.jpg" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile5.png" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile6.jpg" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile7.png" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile8.jpg" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
-            <div class="swiper-slide">
-              <img src="./img/company_profile9.jpg" alt="" style="width:120px; height:120px;margin:auto;">
-            </div>
+            <?php 
+            if ($company_data->num_rows>0) {
+              while($data=$company_data->fetch_assoc()){ ?>
+                  <div class="swiper-slide">
+                    <img src="<?= $base_url.'upload/'.$data['profile'] ?>" alt="" style="width:120px; height:120px;margin:auto;">
+                  </div>
+            <?php
+              }
+            }
+            ?>
           </div>
         </div>
       </div>
@@ -272,34 +265,30 @@ $todayDate = date('Y-m-d H:i:s');
           if ($select_company->num_rows>0) {
             while($company = $select_company->fetch_assoc()){ ?>
               <div class="col-lg-4 col-md-6 col-12">
-                <div class="card mb-3 shadow">
+                <div class="card mb-3 shadow" style="height: 150px;">
                   <div class="card-body">
-                    <div class="d-flex justify-content-center gap-4">
+                    <div class="d-flex justify-content-center gap-5">
                       <img src="<?= $base_url.'upload/'.$company['company_profile'] ?>" alt="" style="width:60px;height:60px;">
                       <div>
                         <h5><?= $company['title_name'] ?></h5>
                         <a href=""><?= $company['company_name'] ?></a>
                         <?php
                         $created_at = $company['created_at']; // e.g., "2025-07-15 13:21:19"
-
-                        $today = new DateTime($todayDate);
+                        $now = new DateTime(); // current datetime
                         $created = new DateTime($created_at);
+                        $interval = $created->diff($now);
 
-                        $interval = $created->diff($today);
+                        // Calculate days and hours
+                        $days = $interval->d;
+                        $hours = $interval->h;
 
-                        // echo $interval->format('%H hours %i minutes %s seconds ago');
-                        // echo $interval->format('%H hours ago');
-                        // die();
-                        // $post_time = $company['created_at'] - $todayDate ;
-                        // var_dump($todayDate);
-                        // var_dump($company['created_at']);
-                        // var_dump($post_time);
-                        // die();
-
-                        // $dateTime = new DateTime($post_time);
-                        // $dateOnly = $dateTime->format('Y-m-d');
+                        if ($days >= 1) {
+                            $time_ago = $days . ' day' . ($days > 1 ? 's' : '') . ' ago';
+                        } else {
+                            $time_ago = $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago';
+                        }
                         ?>
-                        <p class="mt-1"><?= $interval->format('%h hours ago') ?></p>
+                        <p class="mt-1"><?= $time_ago ?></p>
                       </div>
                     </div>
                   </div>
@@ -309,118 +298,6 @@ $todayDate = date('Y-m-d H:i:s');
             }
           }
           ?>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile2.png" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile3.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile4.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile5.png" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile6.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile7.png" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile8.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile9.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -432,90 +309,43 @@ $todayDate = date('Y-m-d H:i:s');
       </div>
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile9.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
+          <?php
+            if ($new_company->num_rows>0) {
+              while($data=$new_company->fetch_assoc()){ ?>
+                <div class="col-lg-4 col-md-6 col-12" style="height: 150px;">
+                  <div class="card mb-3 shadow">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-center gap-4">
+                        <img src="<?= $base_url.'upload/'.$data['company_profile'] ?>" alt="" style="width:60px;height:60px;">
+                        <div>
+                          <h5><?= $data['title_name'] ?></h5>
+                          <a href=""><?= $data['company_name'] ?></a>
+                          <?php
+                          $created_at = $data['created_at']; // e.g., "2025-07-15 13:21:19"
+                          $now = new DateTime(); // current datetime
+                          $created = new DateTime($created_at);
+                          $interval = $created->diff($now);
+
+                          // Calculate days and hours
+                          $days = $interval->d;
+                          $hours = $interval->h;
+
+                          if ($days >= 1) {
+                              $time_ago = $days . ' day' . ($days > 1 ? 's' : '') . ' ago';
+                          } else {
+                              $time_ago = $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago';
+                          }
+                          ?>
+                          <p class="mt-1"><?= $time_ago ?></p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile9.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile9.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile3.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile2.png" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="card mb-3 shadow">
-              <div class="card-body">
-                <div class="d-flex justify-content-between gap-4">
-                  <img src="./img/company_profile1.jpg" alt="" style="width:60px;height:60px;">
-                  <div>
-                    <h5>Job Title(Developer)</h5>
-                    <a href="">Company Name Myanmar job search</a>
-                    <p>3 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php
+              }
+            }
+          ?>
         </div>
       </div>
     </section>

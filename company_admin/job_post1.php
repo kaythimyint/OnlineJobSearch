@@ -396,7 +396,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="description" class="mb-2">Job Description</label>
-                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= $description ?></textarea>
+                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= nl2br(htmlspecialchars($description)) ?></textarea>
                             <?php
                             if ($description_error && $error) { ?>
                                 <small class="text-danger"><?= $description_error ?></small>
@@ -410,7 +410,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="requirement" class="mb-2">Job Requirement</label>
-                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= $requirement ?></textarea>
+                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= nl2br(htmlspecialchars($requirement)) ?></textarea>
                             <?php
                             if ($requirement_error && $error) { ?>
                                 <small class="text-danger"><?= $requirement_error ?></small>
@@ -424,7 +424,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="benefit" class="mb-2">Benefits</label>
-                            <textarea name="benefit" id="benefit" cols="30" rows="10" class="form-control" placeholder="Enter benefit"><?= $benefit ?></textarea>
+                            <textarea name="benefit" id="benefit" cols="30" rows="10" class="form-control" placeholder="Enter benefit"><?= nl2br(htmlspecialchars($benefit)) ?></textarea>
                             <?php
                             if ($benefit_error && $error) { ?>
                                 <small class="text-danger"><?= $benefit_error ?></small>

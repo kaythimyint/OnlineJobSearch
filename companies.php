@@ -145,7 +145,7 @@ $todayDate = date('Y-m-d H:i:s');
         </div>
     </section>
 
-    <footer class="pt-5" style="background-color: darkblue;position:fixed;bottom:0;width:100%">
+    <footer class="pt-5" style="background-color: darkblue;">
         <div class="container">
         <div class="row">
             <div class="col-lg-4 col-8 order-lg-1 order-1">

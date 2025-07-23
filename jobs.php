@@ -63,7 +63,10 @@ $select_salary = selectData('salary',$mysqli);
         font-weight: 800;
         font-style: normal;
     }
-    
+    .pagination-container .btn {
+        min-width: 100px;
+        margin-bottom: 10px;
+    }
   </style>
 </head>
 
@@ -221,6 +224,9 @@ $select_salary = selectData('salary',$mysqli);
         <div class="col-lg-8 card-show">
             
         </div>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="pagination-container"></div>
+        </div>
     </div>
     </div>
 </section>
@@ -278,104 +284,154 @@ $select_salary = selectData('salary',$mysqli);
 <script>
     $(document).ready(function(){
 
-    function collectFilters(){
-        let categories = [];
-        let job_types = [];
-        let salaries = [];
+        let allJobs = [];
+        let jobsPerPage = 4;
+        let currentPage = 1;
 
-        $('.category-search-box:checked').each(function(){
-            categories.push($(this).val());
-        });
+        function collectFilters(){
+            let categories = [];
+            let job_types = [];
+            let salaries = [];
 
-        $('.jobtype-search-box:checked').each(function(){
-            job_types.push($(this).val());
-        });
+            $('.category-search-box:checked').each(function(){
+                categories.push($(this).val());
+            });
 
-        $('.salary-search-box:checked').each(function(){
-            salaries.push($(this).val());
-        });
+            $('.jobtype-search-box:checked').each(function(){
+                job_types.push($(this).val());
+            });
 
-        return {
-            categories: categories,
-            job_types: job_types,
-            salaries: salaries
-        };
-    }
+            $('.salary-search-box:checked').each(function(){
+                salaries.push($(this).val());
+            });
 
-    function clearFilters() {
-        $('.category-search-box, .jobtype-search-box, .salary-search-box').prop('checked', false);
-    }
+            return {
+                categories: categories,
+                job_types: job_types,
+                salaries: salaries
+            };
+        }
 
-    function loadJobs(filters = {}){
-        $.ajax({
-            url: 'jobs_api.php',
-            type: 'POST',
-            data: filters,
-            dataType: 'json',
-            success: function(response){
-                let html = '';
-                if(response.jobs){
-                    response.jobs.forEach(function(job){
-                        html += generateJobCard(job);
-                    });
-                }else{
-                    // html = '<p class="text-center text-danger">No jobs found</p>';
-                    loadJobs(); // Reload all jobs if no matches (recursive call)
-                    return;
+        function clearFilters() {
+            $('.category-search-box, .jobtype-search-box, .salary-search-box').prop('checked', false);
+        }
+
+        function loadJobs(filters = {}){
+            $.ajax({
+                url: 'jobs_api.php',
+                type: 'POST',
+                data: filters,
+                dataType: 'json',
+                success: function(response){
+                    if(response.jobs){
+                        allJobs = response.jobs;
+                        currentPage = 1;
+                        renderJobs();
+                        renderPagination();
+                    } else {
+                        $('.card-show').html('<p class="text-center text-danger">No jobs found</p>');
+                        $('.pagination-container').html('');
+                    }
+                    clearFilters();  // optional
                 }
-                $('.card-show').html(html);
-                clearFilters();  // Clear checkboxes after each search
+            });
+        }
+
+        function renderJobs() {
+            let start = (currentPage - 1) * jobsPerPage;
+            let end = start + jobsPerPage;
+            let paginatedJobs = allJobs.slice(start, end);
+
+            let html = '';
+            paginatedJobs.forEach(function(job){
+                html += generateJobCard(job);
+            });
+
+            $('.card-show').html(html);
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(allJobs.length / jobsPerPage);
+            let html = '';
+
+            if (totalPages <= 1) {
+                $('.pagination-container').html('');
+                return;
+            }
+
+            // Prev button
+            if (currentPage > 1) {
+                html += `<button class="page-btn btn btn-sm btn-outline-primary me-1" data-page="${currentPage - 1}">&laquo; Prev</button>`;
+            }
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="page-btn btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'} me-1" data-page="${i}">${i}</button>`;
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                html += `<button class="page-btn btn btn-sm btn-outline-primary me-1" data-page="${currentPage + 1}">Next &raquo;</button>`;
+            }
+
+            $('.pagination-container').html(html);
+        }
+
+        function generateJobCard(job){
+            return `
+                <div class="card mb-2 shadow click_card" data-id="${job.id}">
+                    <div class="card-body">
+                        <h5>${job.title}</h5>
+                        <span class="me-5">${job.company}</span>    
+                        <i class="fa-solid fa-location-dot"></i> ${job.city}, ${job.township}
+                        <i class="fa-solid fa-id-card ms-2"></i> Job ID : ${job.id}
+                        <p class="pt-3">${job.description}</p>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <p class="pt-2">${job.salary}</p>
+                            <p class="pt-2"><i class="fa-solid fa-calendar-days"></i> ${job.deadline}</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        // Pagination button click
+        $(document).on('click', '.page-btn', function(){
+            currentPage = parseInt($(this).data('page'));
+            renderJobs();
+            renderPagination();
+        });
+
+        // Initial load
+        loadJobs();
+
+        // Filter logic with radio-like checkbox
+        $('.category-search-box').click(function(){
+            $('.category-search-box').not(this).prop('checked', false);
+            let filters = collectFilters();
+            loadJobs(filters);
+        });
+
+        $('.jobtype-search-box').click(function(){
+            $('.jobtype-search-box').not(this).prop('checked', false);
+            let filters = collectFilters();
+            loadJobs(filters);
+        });
+
+        $('.salary-search-box').click(function(){
+            $('.salary-search-box').not(this).prop('checked', false);
+            let filters = collectFilters();
+            loadJobs(filters);
+        });
+
+        // Job card click
+        $(document).on('click', '.click_card', function(){
+            const id = parseInt($(this).data('id'));
+            if (!Number.isNaN(id) && id > 0) {
+                window.location.href = 'job_detail.php?id=' + id;
             }
         });
-    }
 
-    function generateJobCard(job){
-        return `
-            <div class="card mb-2 shadow click_card" data-id="${job.id}">
-                <div class="card-body">
-                    <h5>${job.title}</h5>
-                    <span class="me-5">${job.company}</span>    
-                    <i class="fa-solid fa-location-dot"></i> ${job.city}, ${job.township}
-                    <i class="fa-solid fa-id-card ms-2"></i> Job ID : ${job.id}
-                    <p class="pt-3">${job.description}</p>
-                    <div class="d-flex justify-content-between fw-bold">
-                        <p class="pt-2">${job.salary}</p>
-                        <p class="pt-2"><i class="fa-solid fa-calendar-days"></i> ${job.deadline}</p>
-                    </div>
-                </div>
-            </div>`;
-    }
-
-    // Initial load
-    loadJobs();
-
-    // Handle checkboxes with auto-uncheck behavior (simulate radio buttons)
-    $('.category-search-box').click(function(){
-        $('.category-search-box').not(this).prop('checked', false); // uncheck others
-        let filters = collectFilters();
-        loadJobs(filters);
     });
-
-    $('.jobtype-search-box').click(function(){
-        $('.jobtype-search-box').not(this).prop('checked', false);
-        let filters = collectFilters();
-        loadJobs(filters);
-    });
-
-    $('.salary-search-box').click(function(){
-        $('.salary-search-box').not(this).prop('checked', false);
-        let filters = collectFilters();
-        loadJobs(filters);
-    });
-    
-    $(document).on('click','.click_card',function(){
-        const id = parseInt($(this).data('id'));
-        if (!Number.isNaN(id) && id > 0) {
-            window.location.href = 'job_detail.php?id=' + id;
-        }
-    });
-
-});
 </script>
 
 </body>

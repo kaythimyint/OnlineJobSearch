@@ -48,12 +48,12 @@ $select_res = $mysqli->query($sql);
                         <table class="table text-center" style="color: black !important;">
                             <thead>
                                 <tr>
-                                    <th class="col-1">ID No</th>
-                                    <th class="col-2">Category</th>
-                                    <th class="col-3">Title</th>
-                                    <th class="col-1">Vacancy</th>
-                                    <th class="col-2">Status</th>
-                                    <th class="col-3">Action</th>
+                                    <th class="col-1 col-md-2">Company ID</th>
+                                    <th class="col-1 col-md-1">Category</th>
+                                    <th class="col-1 col-md-3">Title</th>
+                                    <th class="col-1 col-md-1">Vacancy</th>
+                                    <th class="col-1 col-md-2">Status</th>
+                                    <th class="col-1 col-md-2">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

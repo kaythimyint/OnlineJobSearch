@@ -420,7 +420,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="description" class="mb-2">Job Description</label>
-                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= !empty($description) ? $description : $job_post_res['description'] ?></textarea>
+                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= !empty($description) ? htmlspecialchars($description) : htmlspecialchars($job_post_res['description']) ?></textarea>
                             <?php
                             if ($description_error && $error) { ?>
                                 <small class="text-danger"><?= $description_error ?></small>
@@ -434,7 +434,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="requirement" class="mb-2">Job Requirement</label>
-                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= !empty($requirement) ? $requirement : $job_post_res['requirements'] ?></textarea>
+                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= !empty($requirement) ? htmlspecialchars($requirement) :htmlspecialchars($job_post_res['requirements']) ?></textarea>
                             <?php
                             if ($requirement_error && $error) { ?>
                                 <small class="text-danger"><?= $requirement_error ?></small>
@@ -448,7 +448,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="benefit" class="mb-2">Benefits</label>
-                            <textarea name="benefit" id="benefit" cols="30" rows="10" class="form-control" placeholder="Enter benefit"><?= $job_post_res['benefit'] ?></textarea>
+                            <textarea name="benefit" id="benefit" cols="30" rows="10" class="form-control" placeholder="Enter benefit"><?= htmlspecialchars($job_post_res['benefit']) ?></textarea>
                             <?php
                             if ($benefit_error && $error) { ?>
                                 <small class="text-danger"><?= $benefit_error ?></small>
