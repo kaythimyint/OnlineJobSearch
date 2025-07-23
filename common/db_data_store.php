@@ -13,6 +13,11 @@ $job_title = [
     ['name' => 'Warehouse Staff'],
     ['name' => 'Finance & Accounting Executive'],
     ['name' => 'Electrical Engineer'],
+    ['name' => 'Graphic Class Instructor'],
+    ['name' => 'Preschool assistant teacher'],
+    ['name' => 'Data Entry'],
+    ['name' => 'Admin Officer'],
+    ['name' => 'Accountant'],
 ];
 foreach($job_title as $title){
     insertData('job_title',$mysqli,$title);
@@ -39,6 +44,8 @@ $categories = [
     ['name' => 'Store / Warehousing'],
     ['name' => 'Engineering'],
     ['name' => 'Accounting/Finance'],
+    ['name' => 'Call Center'],
+    ['name' => 'Admin/Office'],
 ];
 foreach($categories as $category){
     insertData('categories',$mysqli,$category);
@@ -89,6 +96,9 @@ $cities = [
     ['name' => 'Mandalay'],
     ['name' => 'Naypyitaw'],
     ['name' => 'Bago'],
+    ['name' => 'Ayeyarwady'],
+    ['name' => 'Magway'],
+    ['name' => 'Sagaing'],
 ];
 foreach($cities as $city){
     insertData('location_city',$mysqli,$city);
@@ -100,6 +110,13 @@ $townships = [
     ['name' => 'South Dagon'],
     ['name' => 'Sanchaung'],
     ['name' => 'Yankin'],
+    ['name' => 'Chanmyathazi'],
+    ['name' => 'Chanayethazan'],
+    ['name' => 'Meiktila'],
+    ['name' => 'Ottarathiri'],
+    ['name' => 'Pathein'],
+    ['name' => 'Pyay'],
+    ['name' => 'Letpadan'],
 ];
 foreach($townships as $township){
     insertData('location_township',$mysqli,$township);
@@ -112,6 +129,17 @@ $users = [
         'last_name' => 'Aung',
         'name' => 'AyeAyeAung',
         'email' => 'ayeayeaung@gmail.com',
+        'password' => md5('password'),
+        'gender' => 'female',
+        'phone' => '0912345679',
+        'address' => 'Yangon',
+        'role' => 'user',
+    ],
+    [
+        'first_name' => 'Phyu Phyu',
+        'last_name' => 'Aung',
+        'name' => 'PhyuPhyuAung',
+        'email' => 'phyuphyuaung@gmail.com',
         'password' => md5('password'),
         'gender' => 'female',
         'phone' => '0912345679',

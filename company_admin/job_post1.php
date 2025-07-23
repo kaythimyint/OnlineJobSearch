@@ -132,7 +132,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $description_error = "Job description greater than 20 characters.";
     }else if (strlen($description) >= 700) {
         $error = true;
-        $description_error = "Job description greater than 20 characters.";
+        $description_error = "Job description less than 700 characters.";
     }
 
     //requiement validation
@@ -144,19 +144,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $requirement_error = "Job requirement greater than 20 characters.";
     }else if (strlen($requirement) >= 700) {
         $error = true;
-        $requirement_error = "Job requirement greater than 20 characters.";
-    }
-
-    //Benefit validation
-    if (strlen($benefit) === 0) {
-        $error = true;
-        $benefit_error = "Please enter benefits.";
-    }else if (strlen($benefit) <= 20) {
-        $error = true;
-        $benefit_error = "Benefits greater than 20 characters.";
-    }else if (strlen($benefit) >= 500) {
-        $error = true;
-        $benefit_error = "Benefits greater than 20 characters.";
+        $requirement_error = "Job requirement less than 700 characters.";
     }
 
     if (!$error) {

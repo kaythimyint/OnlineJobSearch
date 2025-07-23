@@ -1,6 +1,25 @@
 <?php
 require "./header.php";
 
+if (isset($_POST['id']) && isset($_POST['status'])) {
+    $application_id = $mysqli->real_escape_string($_POST['id']);
+    $status = $mysqli->real_escape_string($_POST['status']);
+
+    $data=[
+        'status' => $status
+    ];
+    $where=[
+        'id' => $application_id
+    ];
+    $update_res =updateData('applications',$mysqli,$data,$where) ;
+
+    if ($update_res) {
+        echo "success";
+    } else {
+        echo "fail";
+    }
+}
+
 $sql = "SELECT job_post.*,categories.name AS category_name,job_title.name AS title_name,job_type.name AS jobtype_name
         FROM `job_post`
         LEFT JOIN `categories` ON categories.id = job_post.category_id
@@ -32,8 +51,8 @@ $select_res = $mysqli->query($sql);
                                     <th class="col-1">ID No</th>
                                     <th class="col-2">Category</th>
                                     <th class="col-3">Title</th>
-                                    <th class="col-2">Job_type</th>
                                     <th class="col-1">Vacancy</th>
+                                    <th class="col-2">Status</th>
                                     <th class="col-3">Action</th>
                                 </tr>
                             </thead>
@@ -45,8 +64,13 @@ $select_res = $mysqli->query($sql);
                                             <td><?= $result['company_id'] ?></td>
                                             <td><?= $result['category_name'] ?></td>
                                             <td><?= $result['title_name'] ?></td>
-                                            <td><?= $result['jobtype_name'] ?></td>
                                             <td><?= $result['vacancy'] ?></td>
+                                            <td>
+                                                <?php
+                                                $class = ($result['status'] == 'posting') ? 'bg-warning' : 'bg-success';
+                                                ?>
+                                                <span class="p-2 <?= $class ?> rounded"><?= $result['status'] ?></span>
+                                            </td>
                                             <td>
                                                 <a href="<?= $company_base_url . 'job_post_update.php?update_id=' . $result['id'] ?>" class="btn btn-info mb-2">Update</a>
                                                 <a href="<?= $company_base_url . 'job_post_detail.php?detail_id=' . $result['id'] ?>" class="btn btn-primary mb-2">Details</a>

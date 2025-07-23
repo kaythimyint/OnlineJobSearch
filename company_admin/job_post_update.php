@@ -19,6 +19,8 @@ $township =
 $township_error = 
 $deadline = 
 $deadline_error = 
+$status =
+$status_error = 
 $description = 
 $description_error =
 $requirement = 
@@ -55,6 +57,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     $city = $mysqli->real_escape_string($_POST['city']);
     $township = $mysqli->real_escape_string($_POST['township']);
     $deadline = $mysqli->real_escape_string($_POST['deadline']);
+    $status = $mysqli->real_escape_string($_POST['status']);
     $description = $mysqli->real_escape_string($_POST['description']);
     $requirement = $mysqli->real_escape_string($_POST['requirement']);
     $benefit = $mysqli->real_escape_string($_POST['benefit']);
@@ -122,6 +125,12 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $deadline_error = "Please choose deadline date";
     }
 
+    //status validation
+    if (strlen($status) === 0) {
+        $error = true;
+        $status_error = "Please choose status";
+    }
+
     //description validation
     if (strlen($description) === 0) {
         $error = true;
@@ -131,7 +140,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $description_error = "Job description greater than 20 characters.";
     }else if (strlen($description) >= 700) {
         $error = true;
-        $description_error = "Job description greater than 20 characters.";
+        $description_error = "Job description less than 700 characters.";
     }
 
     //requiement validation
@@ -143,37 +152,26 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
         $requirement_error = "Job requirement greater than 20 characters.";
     }else if (strlen($requirement) >= 700) {
         $error = true;
-        $requirement_error = "Job requirement greater than 20 characters.";
-    }
-
-    //Benefit validation
-    if (strlen($benefit) === 0) {
-        $error = true;
-        $benefit_error = "Please enter benefits.";
-    }else if (strlen($benefit) <= 20) {
-        $error = true;
-        $benefit_error = "Benefits greater than 20 characters.";
-    }else if (strlen($benefit) >= 500) {
-        $error = true;
-        $benefit_error = "Benefits greater than 20 characters.";
+        $requirement_error = "Job requirement less than 700 characters.";
     }
 
     if (!$error) {
         $data = [
-            'company_id' => $id,
-            'job_title_id' => $job_title,
-            'requirements' => $requirement,
-            'experience_id' => $experience,
-            'experience_id' => $experience,
-            'salary_id' => $salary,
-            'vacancy' => $vacancy,
-            'description' => $description,
-            'benefit' => $benefit,
-            'job_type_id' => $job_type,
-            'location_city_id' => $city,
-            'location_township_id' => $township,
-            'category_id' => $category,
-            'deadline' => $deadline,
+            'company_id'            => $id,
+            'job_title_id'          => $job_title,
+            'requirements'          => $requirement,
+            'experience_id'         => $experience,
+            'experience_id'         => $experience,
+            'salary_id'             => $salary,
+            'vacancy'               => $vacancy,
+            'description'           => $description,
+            'benefit'               => $benefit,
+            'job_type_id'           => $job_type,
+            'location_city_id'      => $city,
+            'location_township_id'  => $township,
+            'category_id'           => $category,
+            'deadline'              => $deadline,
+            'status'                => $status
         ];
         $where = [
             'id' => $update_id
@@ -273,7 +271,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="vacancy" class="mb-2">Vacancy</label>
-                            <input type="number" class="form-control" name="vacancy" value="<?= $job_post_res['vacancy'] ?>" min="1" id="vacancy" placeholder="eg: 1 or 2" name="quantity">
+                            <input type="number" class="form-control" name="vacancy" value="<?= !empty($vacancy) ? $vacancy : $job_post_res['vacancy'] ?>" min="1" id="vacancy" placeholder="eg: 1 or 2" name="quantity">
                             <?php
                             if ($vacancy_error && $error) { ?>
                                 <small class="text-danger"><?= $vacancy_error ?></small>
@@ -395,6 +393,24 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-lg-6 col-md-12">
+                    <div class="basic-form">
+                        <div class="form-group">
+                            <label for="status" class="mb-2">Status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="">Choose Status</option>
+                                <option value="posting" <?= $job_post_res['status'] == 'posting' ? 'selected':'' ?> >Posting</option>
+                                <option value="complete" <?= $job_post_res['status'] == 'complete' ? 'selected':'' ?> >Complete</option>
+                            </select>
+                            <?php
+                            if ($status_error && $error) { ?>
+                                <small class="text-danger"><?= $status_error ?></small>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row shadow mt-4">
                 <div class="col-12 p-3 mb-3" style="background-color: darkblue;">
@@ -404,7 +420,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="description" class="mb-2">Job Description</label>
-                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= $job_post_res['description'] ?></textarea>
+                            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter job description"><?= !empty($description) ? $description : $job_post_res['description'] ?></textarea>
                             <?php
                             if ($description_error && $error) { ?>
                                 <small class="text-danger"><?= $description_error ?></small>
@@ -418,7 +434,7 @@ if(isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <div class="basic-form">
                         <div class="form-group">
                             <label for="requirement" class="mb-2">Job Requirement</label>
-                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= $job_post_res['requirements'] ?></textarea>
+                            <textarea name="requirement" id="requirement" cols="30" rows="10" class="form-control" placeholder="Enter job requirement"><?= !empty($requirement) ? $requirement : $job_post_res['requirements'] ?></textarea>
                             <?php
                             if ($requirement_error && $error) { ?>
                                 <small class="text-danger"><?= $requirement_error ?></small>

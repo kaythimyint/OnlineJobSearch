@@ -162,6 +162,7 @@ function create_table($mysqli)
         location_township_id INT NOT NULL,
         category_id INT NOT NULL,
         deadline VARCHAR(20) NOT NULL,
+        status ENUM('posting','complete') DEFAULT 'posting',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE,

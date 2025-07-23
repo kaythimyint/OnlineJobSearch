@@ -85,7 +85,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     } else if (strlen($employer_phone) <= 6) {
         $employer_error = true;
         $employerPhone_error  = "Phone greater than 6 number.";
-    } else if (strlen($employer_phone) >= 11) {
+    } else if (strlen($employer_phone) > 11) {
         $employer_error = true;
         $employerPhone_error  = "Phone less than 11 number.";
     }
