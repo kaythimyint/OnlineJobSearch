@@ -6,20 +6,22 @@ require "./common/database.php";
 require "./common/common_funtion.php";
 require "./common/url.php";
 
-$sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,job_title.name AS title_name
-                    FROM `job_post`
-                    LEFT JOIN `companies` ON companies.id=job_post.company_id
-                    LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
-                    ORDER BY RAND()
-                    LIMIT 9";
+$sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,
+        job_title.name AS title_name,companies.id AS company_id
+        FROM `job_post`
+        LEFT JOIN `companies` ON companies.id=job_post.company_id
+        LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
+        ORDER BY RAND()
+        LIMIT 9";
 $select_company = $mysqli->query($sql);
 
-$sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,job_title.name AS title_name
-                    FROM `job_post`
-                    LEFT JOIN `companies` ON companies.id=job_post.company_id
-                    LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
-                    ORDER BY job_post.created_at DESC
-                    LIMIT 9";
+$sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,
+        job_title.name AS title_name,companies.id AS company_id
+        FROM `job_post`
+        LEFT JOIN `companies` ON companies.id=job_post.company_id
+        LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
+        ORDER BY job_post.created_at DESC
+        LIMIT 9";
 $new_company = $mysqli->query($sql);
 
 $company_data = selectData('companies',$mysqli);
@@ -271,7 +273,7 @@ $company_data = selectData('companies',$mysqli);
                       <img src="<?= $base_url.'upload/'.$company['company_profile'] ?>" alt="" style="width:60px;height:60px;">
                       <div>
                         <h5><?= $company['title_name'] ?></h5>
-                        <a href=""><?= $company['company_name'] ?></a>
+                        <a href="<?= $base_url.'company_opening_jobs.php?company_id='.$company['company_id'] ?>"><?= $company['company_name'] ?></a>
                         <?php
                         $created_at = $company['created_at']; // e.g., "2025-07-15 13:21:19"
                         $now = new DateTime(); // current datetime
@@ -319,7 +321,7 @@ $company_data = selectData('companies',$mysqli);
                         <img src="<?= $base_url.'upload/'.$data['company_profile'] ?>" alt="" style="width:60px;height:60px;">
                         <div>
                           <h5><?= $data['title_name'] ?></h5>
-                          <a href=""><?= $data['company_name'] ?></a>
+                          <a href="<?= $base_url.'company_opening_jobs.php?company_id='.$data['company_id'] ?>"><?= $data['company_name'] ?></a>
                           <?php
                           $created_at = $data['created_at']; // e.g., "2025-07-15 13:21:19"
                           $now = new DateTime(); // current datetime

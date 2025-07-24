@@ -67,6 +67,10 @@ $select_salary = selectData('salary',$mysqli);
         min-width: 100px;
         margin-bottom: 10px;
     }
+    .click_card
+    {
+        cursor: pointer;
+    }
   </style>
 </head>
 

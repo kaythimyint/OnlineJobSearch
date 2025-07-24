@@ -224,7 +224,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     <a class="nav-link text-light me-3" href="<?= $base_url.'jobs.php'?>">Jobs</a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a class="nav-link text-light me-3" href="#company">Companies</a>
+                    <a class="nav-link text-light me-3" href="<?= $base_url.'companies.php'?>">Companies</a>
                 </li>
                 <?php
                 if (empty($_SESSION['role'])|| $_SESSION['role'] == 'employer') { ?>

@@ -5,15 +5,31 @@ require "./common/database.php";
 require "./common/common_funtion.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $id = isset($_GET['post_id'])? $_GET['post_id'] : '';
+    
+    $id = isset($_GET['company_id'])? $_GET['company_id'] : '';
 
-    $sql = "SELECT job_post.*,companies.address AS company_address,
-            companies.company_name AS company_name,companies.profile AS company_profile
-            FROM `job_post`
-            LEFT JOIN `companies` ON job_post.company_id = companies.id
-            where job_post.id = $id
-            ";
+    $sql = "SELECT job_post.*, job_title.name AS title_name, companies.company_name AS company_name,
+        categories.name AS category_name, salary.type AS salary_range,companies.address AS company_address,
+        job_type.name AS job_type_name,companies.profile AS company_profile,
+        location_city.name AS city_name, location_township.name AS township_name
+        FROM `job_post`
+        LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
+        LEFT JOIN `companies` ON job_post.company_id=companies.id
+        LEFT JOIN `categories` ON job_post.category_id=categories.id
+        LEFT JOIN `salary` ON job_post.salary_id=salary.id
+        LEFT JOIN `job_type` ON job_post.job_type_id=job_type.id
+        LEFT JOIN `location_city` ON job_post.location_city_id=location_city.id
+        LEFT JOIN `location_township` ON job_post.location_township_id=location_township.id
+        where job_post.company_id = $id";
+
     $post_data = $mysqli->query($sql);
+
+    $jobs = [];
+    if ($post_data && $post_data->num_rows > 0) {
+        while ($row = $post_data->fetch_assoc()) {
+        $jobs[] = $row;
+        }
+    }
 }   
 
 ?>
@@ -68,6 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         font-family:"Share Tech", sans-serif;
         font-weight: 800;
         font-style: normal;
+    }
+    .click_card
+    {
+        cursor: pointer;
     }
   </style>
 </head>
@@ -135,30 +155,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     
 </section>
 <section class="categories">
-    <div class="container">
-        <div class="row">
-            <?php
-            if ($post_data->num_rows>0) {
-                while($data=$post_data->fetch_assoc()){ ?>
-                    <div class="col-lg-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <div>
-                                    <img src="<?= $base_url.'upload/'.$data['company_profile'] ?>" alt="" style="width:200px;height: 200px;">
-                                    <div>
-                                        <h1><?= $data['company_name'] ?></h1>
-                                        <p><?= $data['company_address'] ?></p>
-                                    </div>
-                                </div>
+    <div class="row" style="background-color: darkblue;border-top:1px solid blue;">
+        <div class="col-lg-8">
+            <?php if (!empty($jobs)): ?>
+                <div class="container">
+                    <div class="d-flex justify-content-center gap-5 align-items-center p-5">
+                        <img src="<?= $base_url . 'upload/' . $jobs[0]['company_profile'] ?>" alt="" style="width:180px;height: 180px;">
+                        <div class="text-light">
+                            <h1><?= $jobs[0]['company_name'] ?></h1>
+                            <span class="fs-4"><?= $jobs[0]['company_address'] ?></span>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div> 
+    </div>
+    <div class="row m-3">
+    <h2 class="text-center mb-3">Opening jobs</h2>
+    <div class="col-12">
+        <div class="row justify-content-center">
+            <?php foreach ($jobs as $result): ?>
+                <div class="col-md-9 col-12">
+                    <div class="card mb-3 shadow click_card" data-id="<?= $result['id'] ?>">
+                        <div class="card-body">
+                            <h5><?= $result['title_name'] ?></h5>
+                            <span class="me-5"><?= $result['company_name'] ?></span>    
+                            <i class="fa-solid fa-location-dot"></i> <?= $result['city_name'] . ',' . $result['township_name'] ?>
+                            <i class="fa-solid fa-id-card ms-2"></i> Job ID : <?= $result['id'] ?>
+                            <p class="pt-3"><?= htmlspecialchars($result['description']) ?></p>
+                            <div class="d-flex justify-content-between fw-bold">
+                                <p class="pt-2"><?= $result['salary_range'] ?></p>
+                                <p class="pt-2"><i class="fa-solid fa-calendar-days"></i> <?= $result['deadline'] ?></p>
                             </div>
                         </div>
                     </div>
-            <?php
-                }
-            }
-            ?>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
+</div>
+
 </section>
 <footer class="pt-5" style="background-color: darkblue;">
     <div class="container">
@@ -211,7 +247,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     </div>
     </div>
 </footer>
-
+<script>
+    $(document).ready(function(){
+        $(document).on('click', '.click_card', function(){
+            const id = parseInt($(this).data('id'));
+            if (!Number.isNaN(id) && id > 0) {
+                window.location.href = 'job_detail.php?id=' + id;
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

@@ -131,7 +131,7 @@ $todayDate = date('Y-m-d H:i:s');
                             <div>
                                 <h5><?= $company['company_name'] ?></h5>
                                 <p href=""><?= $company['city_name'].' '.$company['township_name'] ?></p>
-                                <a href="<?='company_opening_jobs.php?post_id:'.$company['company_id'] ?>" class="text-warning"><?= $company['total_jobs'] ?> jobs opening</a>
+                                <a href="<?='company_opening_jobs.php?company_id='.$company['company_id'] ?>" class="text-warning"><?= $company['total_jobs'] ?> jobs opening</a>
                             </div>
                         </div>
                         </div>
