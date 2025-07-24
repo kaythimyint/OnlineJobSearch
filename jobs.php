@@ -317,6 +317,8 @@ $select_salary = selectData('salary',$mysqli);
         }
 
         function loadJobs(filters = {}){
+            console.log(filters);
+            
             $.ajax({
                 url: 'jobs_api.php',
                 type: 'POST',
@@ -332,7 +334,7 @@ $select_salary = selectData('salary',$mysqli);
                         $('.card-show').html('<p class="text-center text-danger">No jobs found</p>');
                         $('.pagination-container').html('');
                     }
-                    clearFilters();  // optional
+                    // clearFilters();  // optional
                 }
             });
         }

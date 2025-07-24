@@ -11,6 +11,8 @@ if (isset($_POST['id'])) {
 } elseif (isset($_GET['id'])) {
     $id = $_GET['id'];
 }
+// var_dump($_SESSION['id']);
+// die();
 
 if (!empty($id)) {
 
@@ -57,11 +59,15 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
     }else{
         $user_id = $_SESSION['id'];
         $job_post_id = $id;
-
-        $user_data = selectData('users', $mysqli, "WHERE id = '$id'");
+    //     var_dump($job_post_id);
+    // die();
+        $user_data = selectData('users', $mysqli, "WHERE id = '$user_id'");
         if ($user_data->num_rows>0) {
             $data = $user_data->fetch_assoc();
+            // var_dump($data['cv']);
+            //     die();
             if (empty($data['cv'])) {
+                
                 $_SESSION['alert'] = [
                         'title' => 'Warning!',
                         'text' => 'Your CV or Resume require.',
@@ -74,7 +80,7 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
             }else{
 
                 $check_result = selectData('applications',$mysqli,"WHERE user_id='$user_id' AND job_post_id='$job_post_id'");
-        
+                
                 if ($check_result->num_rows > 0) {
                     $_SESSION['alert'] = [
                         'title' => 'Warning!',
@@ -85,13 +91,17 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                     ];
                     header("Location: job_detail.php?id=$id");
                     exit();
-                }
-                $value =[
+                }else{
+                    // var_dump($id);
+                    // die();
+                    $value =[
                     'job_post_id' => $id,
                     'user_id'     => $user_id,
                     'status'      => 'pending'
-                ];
+                    ];
                 $insert_sql = insertData('applications',$mysqli,$value);
+                }
+                
                 if ($insert_sql) {
                      $_SESSION['alert'] = [
                         'title' => 'Success!',
@@ -216,16 +226,35 @@ if (isset($_POST['form_sub']) && $_POST['form_sub'] == '1') {
                 <li class="nav-item mb-1">
                     <a class="nav-link text-light me-3" href="#company">Companies</a>
                 </li>
-                <li class="nav-item me-3 mb-1">
-                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
-                        <i class="fa-regular fa-user me-2"></i>User Login
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . 'company_login.php' ?>" style="background-color:gold;">
-                        <i class="fa-regular fa-user me-2"></i>Companies Login
-                    </a>
-                </li>
+                <?php
+                if (empty($_SESSION['role'])|| $_SESSION['role'] == 'employer') { ?>
+                  
+                  <li class="nav-item me-3 mb-1">
+                      <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . "user_login.php" ?>" style="background-color:gold;">
+                          <i class="fa-regular fa-user me-2"></i>User Login
+                      </a>
+                  </li>
+                  <li class="nav-item mb-1">
+                      <a class="nav-link text-light px-4 py-2 rounded" href="<?= $base_url . 'company_login.php' ?>" style="background-color:gold;">
+                          <i class="fa-regular fa-user me-2"></i>Companies Login
+                      </a>
+                  </li>
+                <?php
+                }else{ 
+                  if ($_SESSION['role']=='admin') { ?>
+                    <li class="nav-item">
+                      <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $admin_base_url.'index.php' ?>" style="background-color:gold;">Dashboard</a>
+                    </li>
+                  <?php
+                  }else if($_SESSION['role']=='user'){ ?>
+                    <li class="nav-item">
+                      <a class="nav-link  text-light px-4 py-3 rounded" href="<?= $user_base_url.'index.php' ?>" style="background-color:gold;">Dashboard</a>
+                    </li>
+                  <?php
+                  }?>
+                <?php
+                }
+                ?>
             </ul>
         </div>
     </div>

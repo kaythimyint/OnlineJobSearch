@@ -11,7 +11,7 @@ $sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profi
                     LEFT JOIN `companies` ON companies.id=job_post.company_id
                     LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
                     ORDER BY RAND()
-                    LIMIT 10";
+                    LIMIT 9";
 $select_company = $mysqli->query($sql);
 
 $sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,job_title.name AS title_name
@@ -19,7 +19,7 @@ $sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profi
                     LEFT JOIN `companies` ON companies.id=job_post.company_id
                     LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
                     ORDER BY job_post.created_at DESC
-                    LIMIT 10";
+                    LIMIT 9";
 $new_company = $mysqli->query($sql);
 
 $company_data = selectData('companies',$mysqli);
