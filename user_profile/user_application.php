@@ -6,7 +6,7 @@
             LEFT JOIN `job_post` ON job_post.id=applications.job_post_id
             LEFT JOIN `companies` ON job_post.company_id=companies.id
             LEFT JOIN `job_title` ON job_post.job_title_id=job_title.id
-            ";
+            WHERE applications.user_id=$id";
     $application = $mysqli->query($sql);
 
 ?>

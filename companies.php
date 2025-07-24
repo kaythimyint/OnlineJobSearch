@@ -6,7 +6,8 @@ require "./common/url.php";
 require "./common/database.php";
 require "./common/common_funtion.php";
 
-$sql = "SELECT job_post.*,COUNT(*) as total_jobs,companies.company_name AS company_name,companies.profile AS company_profile,
+$sql = "SELECT job_post.*,COUNT(*) as total_jobs,companies.company_name AS company_name,
+                    companies.profile AS company_profile,companies.id AS company_id,
                     location_city.name AS city_name,location_township.name AS township_name
                     FROM `job_post`
                     LEFT JOIN `companies` ON companies.id=job_post.company_id
@@ -123,14 +124,14 @@ $todayDate = date('Y-m-d H:i:s');
                 if ($select_company->num_rows>0) {
                 while($company = $select_company->fetch_assoc()){ ?>
                     <div class="col-lg-4 col-md-6 col-12">
-                    <div class="card mb-3 shadow">
+                    <div class="card mb-3 shadow" style="height: 150px;">
                         <div class="card-body">
                         <div class="d-flex justify-content-center gap-4">
                             <img src="<?= $base_url.'upload/'.$company['company_profile'] ?>" alt="" style="width:60px;height:60px;">
                             <div>
                                 <h5><?= $company['company_name'] ?></h5>
                                 <p href=""><?= $company['city_name'].' '.$company['township_name'] ?></p>
-                                <p class="text-warning"><?= $company['total_jobs'] ?> jobs opening</p>
+                                <a href="<?='company_opening_jobs.php?post_id:'.$company['company_id'] ?>" class="text-warning"><?= $company['total_jobs'] ?> jobs opening</a>
                             </div>
                         </div>
                         </div>
