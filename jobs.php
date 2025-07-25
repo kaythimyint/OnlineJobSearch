@@ -9,6 +9,24 @@ $select_category = selectData('categories',$mysqli);
 $select_job_type = selectData('job_type',$mysqli);
 $select_salary = selectData('salary',$mysqli);
 
+// if (isset($_GET['city_id']) && $_GET['city_id'] != '') {
+//     $city_id = $_GET['city_id'];        
+// }
+// $city_search_sql = "SELECT job_post.*, job_title.name AS title_name, companies.company_name AS company_name,
+//     categories.name AS category_name, salary.type AS salary_range,
+//     job_type.name AS job_type_name,
+//     location_city.name AS city_name, location_township.name AS township_name
+//     FROM job_post
+//     LEFT JOIN job_title ON job_post.job_title_id=job_title.id
+//     LEFT JOIN companies ON job_post.company_id=companies.id
+//     LEFT JOIN categories ON job_post.category_id=categories.id
+//     LEFT JOIN salary ON job_post.salary_id=salary.id
+//     LEFT JOIN job_type ON job_post.job_type_id=job_type.id
+//     LEFT JOIN location_city ON job_post.location_city_id=location_city.id
+//     LEFT JOIN location_township ON job_post.location_township_id=location_township.id
+//     WHERE job_post.location_city_id = $city_id ";
+// $city_search = $mysqli->query($city_search_sql);
+
 
 ?>
 <!DOCTYPE html>
@@ -142,7 +160,7 @@ $select_salary = selectData('salary',$mysqli);
                     <?php
                     if ($select_city->num_rows>0) {
                         while($data = $select_city->fetch_assoc()){ ?>
-                            <option value=""><?= $data['name'] ?></option>
+                            <option value="<?= $data['id'] ?>"><?= $data['name'] ?></option>
                     <?php
                         }
                     }
@@ -180,6 +198,7 @@ $select_salary = selectData('salary',$mysqli);
                     <?php
                         }
                     }
+                    $city_id = '';
                     ?>
                 </ul>
                 <div class="border-1"></div>

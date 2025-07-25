@@ -6,6 +6,8 @@ require "./common/database.php";
 require "./common/common_funtion.php";
 require "./common/url.php";
 
+$select_city = selectData('Location_city',$mysqli);
+
 $sql = "SELECT job_post.*,companies.company_name AS company_name,companies.profile AS company_profile,
         job_title.name AS title_name,companies.id AS company_id
         FROM `job_post`
@@ -47,6 +49,7 @@ $company_data = selectData('companies',$mysqli);
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: calibri;
     }
 
     .swiper {
@@ -110,6 +113,18 @@ $company_data = selectData('companies',$mysqli);
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
+    }
+
+    .custom-select {
+        border: none;
+        outline: none;
+        transition: border 0.2s ease;
+    }
+
+    .custom-select:hover,
+    .custom-select:focus {
+        outline: none; /* ensures no outline on click */
+        box-shadow: none;
     }
   </style>
 </head>
@@ -213,23 +228,26 @@ $company_data = selectData('companies',$mysqli);
             <form action="" class="bg-white p-3 rounded shadow">
               <div class="row g-2">
                 <div class="col-md-5 col-12">
-                  <div class="d-flex align-items-center border-bottom border-secondary pb-1">
-                    <select name="city_name" class="form-control border-0">
+                  <div class="d-flex align-items-center border-bottom border-secondary">
+                    <select id="citySelect" class="form-control py-2 custom-select">
                       <option value="">Select City</option>
-                      <option value="yangon">Yangon</option>
-                      <option value="mandalay">Mandalay</option>
-                    </select>
+                      <?php if ($select_city->num_rows > 0): ?>
+                          <?php while($data = $select_city->fetch_assoc()): ?>
+                              <option value="<?= $data['id'] ?>"><?= $data['name'] ?></option>
+                          <?php endwhile; ?>
+                      <?php endif; ?>
+                  </select>
                     <i class="fa-solid fa-location-dot ms-2 text-muted"></i>
                   </div>
                 </div>
                 <div class="col-md-5 col-12">
                   <div class="d-flex align-items-center border-bottom border-secondary pb-1">
-                    <input type="text" placeholder="Search here" class="form-control border-0">
+                    <input type="text" placeholder="Search here" class="form-control custom-select">
                     <i class="fa-solid fa-magnifying-glass ms-2 text-muted"></i>
                   </div>
                 </div>
                 <div class="col-md-2 col-12">
-                  <button type="submit" class="btn w-100 text-dark" style="background-color: gold;">Find Job</button>
+                  <a href="" id="goLink" class="btn w-100 text-dark" style="background-color: gold;">Find Job</a>
                 </div>
               </div>
             </form>
@@ -499,6 +517,18 @@ $company_data = selectData('companies',$mysqli);
         delay: 1500,
         disableOnInteraction: false,
       },
+    });
+
+    document.getElementById('goLink').addEventListener('click', function(e) {
+        const selectedCityId = document.getElementById('citySelect').value;
+        if (!selectedCityId) {
+            e.preventDefault(); // Stop link if nothing selected
+            alert('Please select a city first.');
+            return;
+        }
+
+        // Example: redirect with city ID in query string
+        this.href = 'jobs.php?city_id=' + selectedCityId;
     });
   </script>
 </body>
